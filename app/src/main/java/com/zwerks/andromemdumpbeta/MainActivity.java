@@ -1,5 +1,6 @@
 package com.zwerks.andromemdumpbeta;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
@@ -65,4 +66,10 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    // Method for opening the ProcessesListing Activity
+    public void openProcessesListing(View view){
+        Intent intent =  new Intent(this, ListProcessesActivity.class);
+        startActivity(intent);
+    }
 }
