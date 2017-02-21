@@ -32,12 +32,14 @@ public class psProcessLister {
             InputStreamReader inStreamRdr = new InputStreamReader(myProcess.getInputStream());
             BufferedReader buffReader = new BufferedReader(inStreamRdr);
 
-            int numRead;
-            char[] buffer = new char[5000];
+            int numRead; // The bufferedReader returns the number of characters read
+            char[] destBuffer = new char[5000];
             StringBuffer commandOutput = new StringBuffer();
 
-            while ((numRead = buffReader.read(buffer)) > 0){
-                commandOutput.append(buffer, 0, numRead);
+            // "buffreader.read" returns the number of characters read from the buffReader into the destBuffer
+            while ((numRead = buffReader.read(destBuffer)) > 0){
+                // The StringBuffer "commandOutput" receives the Char array [buffer] and appends it to itself
+                commandOutput.append(destBuffer, 0, numRead);
             }
             buffReader.close();
 
