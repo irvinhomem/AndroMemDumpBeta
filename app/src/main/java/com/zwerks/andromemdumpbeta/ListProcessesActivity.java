@@ -3,7 +3,6 @@ package com.zwerks.andromemdumpbeta;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -28,9 +27,10 @@ public class ListProcessesActivity extends AppCompatActivity {
         });
 
         // psProcessLister procLister = new psProcessLister();
-        // String processList = procLister.listProcesses();
-        //String processList =  new psProcessLister().listProcesses();
+        // String processList = procLister.getProcessListOutput();
+        //String processList =  new psProcessLister().getProcessListOutput();
         TextView txtProcessList = (TextView) findViewById(R.id.txt_process_list_output);
-        txtProcessList.setText(new psProcessLister().listProcesses());
+        //txtProcessList.setText(new psProcessLister().getProcessListOutput());
+        txtProcessList.setText(String.valueOf(new psProcessLister().getProcessesAsList().size()));
     }
 }
