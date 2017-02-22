@@ -34,7 +34,8 @@ public class ListProcessesActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Specify an adapter
-        mAdapter = new ProcessRecyclerAdapter(new psProcessLister().getProcessesAsList());
+        psProcessLister psLister = new psProcessLister();
+        mAdapter = new ProcessRecyclerAdapter(psLister.getProcessesAsList(), psLister.getHeadersArrayList());
         mRecyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

@@ -16,7 +16,9 @@ import java.util.ArrayList;
  */
 
 public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter.ViewHolder> {
-    private ArrayList<String> mDataset;     // Variable with all the processes
+    //private ArrayList<String> mDataset;     // Variable with all the processes
+    private ArrayList<ProcListItem> mDataset;     // Variable with all the processes
+    private ArrayList<ProcListItem> mHeadersLine;
     //private Context mContext;               // Store the context for easy access
     private RadioButton lastCheckedRB = null;
 
@@ -42,9 +44,11 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ProcessRecyclerAdapter(ArrayList<String> myDataset) {
+    //public ProcessRecyclerAdapter(ArrayList<String> myDataset) {
+    public ProcessRecyclerAdapter(ArrayList<ProcListItem> myDataset, ArrayList<ProcListItem> headers) {
         //Assign the received dataset (arraylist) to the adapter's dataset property
         mDataset = myDataset;
+        this.mHeadersLine = headers;
     }
 
     // Create new views (invoked by the layout manager)
@@ -69,9 +73,19 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
         // - replace the contents of the view with that element
 
         //holder.mTextView.setText(String.valueOf(mDataset.get(position)));
-        holder.mRadioButton.setText(String.valueOf(mDataset.get(position)));
-        //holder.mRadioButton.setTag(proc_id, proc_name);
-        holder.msgButton.setText("Dump");
+        // Extract info items
+        ProcListItem procItem = mDataset.get(position);
+        holder.mRadioButton.setText(String.valueOf(procItem.getAllItems()));
+        //holder.mRadioButton.setText(String.valueOf(mDataset.get(position)));
+        if(procItem.getIsHeaderLine()){
+            //holder.mRadioButton.setVisibility();
+        }else {
+            int proc_id = procItem.getPid();
+            String proc_name = procItem.getProc_name();
+            //holder.mRadioButton.setTag(proc_id, proc_name);
+            holder.mRadioButton.setTag(proc_name);
+            holder.msgButton.setText("Dump");
+        }
 
         // Code to ensure only a single Radio Button / Process item is selected
         View.OnClickListener rbClick = new View.OnClickListener() {
