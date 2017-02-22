@@ -81,8 +81,12 @@ public class psProcessLister {
             BufferedReader buffReader = new BufferedReader(inStreamRdr);
 
             //while(buffReader.readLine() != null)  //Misses the first line
-            while(buffReader.read() > 0){
-                processArrayList.add(buffReader.readLine());
+            //buffReader.read checks if there is at least one character and returns the integer value
+            //while(buffReader.read() > 0)
+            String singleLine;
+            while((singleLine = buffReader.readLine()) != null){
+                processArrayList.add(singleLine);
+                //processArrayList.add(buffReader.readLine());
                 if(BuildConfig.DEBUG) {
                     Log.d(LOG_TAG, "'Process' Items in ArrayList: " + String.valueOf(processArrayList.size()));
                 }
