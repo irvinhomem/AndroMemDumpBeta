@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter.ViewHolder> {
     //private ArrayList<String> mDataset;     // Variable with all the processes
     private ArrayList<ProcListItem> mDataset;     // Variable with all the processes
-    private ArrayList<ProcListItem> mHeadersLine;
+    //private ArrayList<ProcListItem> mHeadersLine;
     //private Context mContext;               // Store the context for easy access
     private RadioButton lastCheckedRB = null;
 
@@ -45,10 +45,11 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
 
     // Provide a suitable constructor (depends on the kind of dataset)
     //public ProcessRecyclerAdapter(ArrayList<String> myDataset) {
-    public ProcessRecyclerAdapter(ArrayList<ProcListItem> myDataset, ArrayList<ProcListItem> headers) {
+    //public ProcessRecyclerAdapter(ArrayList<ProcListItem> myDataset, ArrayList<ProcListItem> headers) {
+    public ProcessRecyclerAdapter(ArrayList<ProcListItem> myDataset) {
         //Assign the received dataset (arraylist) to the adapter's dataset property
         mDataset = myDataset;
-        this.mHeadersLine = headers;
+        //this.mHeadersLine = headers;
     }
 
     // Create new views (invoked by the layout manager)

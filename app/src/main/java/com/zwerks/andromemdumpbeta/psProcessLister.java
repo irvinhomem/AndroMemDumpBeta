@@ -78,7 +78,6 @@ public class psProcessLister {
     public ArrayList getProcessesAsList(){
         //ArrayList<String> processArrayList = new ArrayList<>();
 
-
         try{
             Process myProcess = Runtime.getRuntime().exec("/system/bin/ps");
 

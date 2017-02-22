@@ -16,6 +16,7 @@ public class ListProcessesActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private TextView mHeaderLineText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class ListProcessesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mHeaderLineText = (TextView) findViewById(R.id.txt_HeaderTextLine);
 
         /* Use this setting to improve performance if you know that changes
          in content do not change the layout size of the RecyclerView */
@@ -35,8 +37,13 @@ public class ListProcessesActivity extends AppCompatActivity {
 
         // Specify an adapter
         psProcessLister psLister = new psProcessLister();
-        mAdapter = new ProcessRecyclerAdapter(psLister.getProcessesAsList(), psLister.getHeadersArrayList());
-        mRecyclerView.setAdapter(mAdapter);
+        this.mAdapter = new ProcessRecyclerAdapter(psLister.getProcessesAsList());
+        this.mRecyclerView.setAdapter(mAdapter);
+
+        // Get the Headers from the Headers ArrayList
+        ProcListItem headersLineItem = (ProcListItem)psLister.getHeadersArrayList().get(0);
+        String headersAsString = headersLineItem.getAllItems();
+        mHeaderLineText.setText(headersAsString);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

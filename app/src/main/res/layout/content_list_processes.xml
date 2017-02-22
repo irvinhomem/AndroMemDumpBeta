@@ -13,13 +13,16 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/txt_ShortText"
+            android:id="@+id/txt_HeaderTextLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:text="@string/short_text" />
+            android:paddingTop="5dp"
+            android:paddingLeft="20dp"
+            android:text="@string/short_text"
+            android:textSize="10sp"/>
             <!-- android:text="@string/large_text" -->
 
         <android.support.v7.widget.RecyclerView
@@ -27,8 +30,8 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="10dp"
-            android:layout_below="@id/txt_ShortText"/>
+            android:paddingTop="1dp"
+            android:layout_below="@id/txt_HeaderTextLine"/>
 
         <TextView
             android:id="@+id/txt_process_list_output"
