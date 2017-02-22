@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,22 +18,26 @@ import java.util.ArrayList;
 public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter.ViewHolder> {
     private ArrayList<String> mDataset;     // Variable with all the processes
     //private Context mContext;               // Store the context for easy access
+    private RadioButton lastCheckedRB = null;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView mTextView;
+        //public TextView mTextView;
+        public RadioButton mRadioButton;
         public Button msgButton; // Put a Button for fun ... to test each item
 
         public ViewHolder(View view) {
             super(view);
             //mTextView = v;
-            mTextView = (TextView) view.findViewById(R.id.single_process_data);
+            //mTextView = (TextView) view.findViewById(R.id.single_process_data);
+            mRadioButton = (RadioButton) view.findViewById(R.id.single_process_data);
             msgButton = (Button) view.findViewById(R.id.message_button);
 
-            mTextView.setTextSize(10);
+            //mTextView.setTextSize(10);
+            mRadioButton.setTextSize(10);
         }
     }
 
@@ -62,9 +67,24 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(String.valueOf(mDataset.get(position)));
+
+        //holder.mTextView.setText(String.valueOf(mDataset.get(position)));
+        holder.mRadioButton.setText(String.valueOf(mDataset.get(position)));
+        //holder.mRadioButton.setTag(proc_id, proc_name);
         holder.msgButton.setText("Dump");
 
+        // Code to ensure only a single Radio Button / Process item is selected
+        View.OnClickListener rbClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RadioButton curr_checked_rb = (RadioButton) view;
+                if(lastCheckedRB != null){
+                    lastCheckedRB.setChecked(false);
+                }
+                lastCheckedRB = curr_checked_rb;
+            }
+        };
+        holder.mRadioButton.setOnClickListener(rbClick);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
