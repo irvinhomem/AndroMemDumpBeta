@@ -27,8 +27,8 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="7dp"
             android:layout_below="@id/txt_HeaderTextLine" />
+        <!-- android:paddingTop="7dp" -->
 
         <TextView
             android:id="@+id/txt_process_list_output"

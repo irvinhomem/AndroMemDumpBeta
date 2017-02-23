@@ -29,9 +29,28 @@
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax">
                 <TextView
+                    android:id="@+id/lbl_statistics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblStatistics"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"/>
+                <TextView
+                    android:id="@+id/lbl_procCount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="testing"/>
+                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:text="@string/lbl_procCount"
+                    android:layout_below="@id/lbl_statistics"/>
+                <TextView
+                    android:id="@+id/txt_procCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="20dp"
+                    android:paddingStart="20dp"
+                    android:layout_toRightOf="@id/lbl_procCount"/>
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
