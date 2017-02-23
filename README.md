@@ -4,7 +4,7 @@ Android App for Dumping Android Process Memory
 *NB: Not yet functional. Still a work in progress ...*
 
 <h3>Introduction:</h3>
-The aim of this app is to collect process memory dumps store them either on disk (SDCard) or transmit them over the network to some remote storage location. Either full process memory or just metdata /features are to be collected.
+The aim of this app is to collect process memory dumps, and store them either on disk (SDCard), or transmit them over the network to some remote storage location. Either full process memory or just metdata /features are to be collected.
 
 **Current Features:**
 - Listing running processes
