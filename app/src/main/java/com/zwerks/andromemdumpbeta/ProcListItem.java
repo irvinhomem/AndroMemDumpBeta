@@ -24,7 +24,7 @@ public class ProcListItem {
         String allProcInfo = "";
         for(int i = 0; i <= procInfoItems.size()-1 ;i++){
 
-            allProcInfo += (procInfoItems.get(i) + "\t");
+            allProcInfo += (procInfoItems.get(i) + "\t"); // "\t\t|\t"
         }
 
         return allProcInfo;

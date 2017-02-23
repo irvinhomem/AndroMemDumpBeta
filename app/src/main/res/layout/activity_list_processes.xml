@@ -20,7 +20,19 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+            <!-- app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title" -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="parallax">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="testing"/>
+            </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -29,8 +41,35 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+            <TextView
+                android:id="@+id/txt_HeaderTextLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorMyBabyBlue"
+                android:textColor="@color/colorPrimaryDark"
+                android:paddingTop="2dp"
+                android:paddingLeft="20dp"
+                android:paddingBottom="2dp"
+                android:text="@string/short_text"
+                android:textSize="10sp"
+                app:layout_anchor="@id/app_bar"
+                app:layout_anchorGravity="bottom|end"
+                android:layout_gravity="bottom"/>
+
         </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
+
+    <!--
+    android:paddingTop="12dp"
+    app:layout_anchor="@id/app_bar"
+    app:layout_anchorGravity="bottom|end"
+    android:translationZ=""
+    android:alpha="255"
+    android:layout_margin="@dimen/text_margin"
+    app:layout_anchor="@id/app_bar"
+    app:layout_anchorGravity="bottom|end"
+    -->
 
     <include layout="@layout/content_list_processes" />
 
