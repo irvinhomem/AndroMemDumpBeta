@@ -11,6 +11,7 @@
     <!-- ListProcessActivity Strings -->
     <string name="lblStatistics">Statistics:</string>
     <string name="lbl_procCount">Proc Count:</string>
+    <string name="txtProcCount">proc_count</string>
 
     <!-- Other Strings -->
     <string name="short_text"> Lorem ipsum dolor sit ... </string>

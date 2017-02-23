@@ -131,6 +131,10 @@ public class psProcessLister {
         return processArrayList;
     }
 
+    public int getProcessListSize(){
+        return processArrayList.size();
+    }
+
     public ArrayList getHeadersArrayList(){
         return headerLine;
     }

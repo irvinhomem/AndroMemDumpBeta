@@ -59,9 +59,9 @@ public class ListProcessesActivity extends AppCompatActivity {
         //String processList =  new psProcessLister().getProcessListOutput();
         TextView txtProcessList = (TextView) findViewById(R.id.txt_process_list_output);
         //txtProcessList.setText(new psProcessLister().getProcessListOutput());
-        txtProcessList.setText(String.valueOf(psLister.getProcessesAsList().size()));
+        txtProcessList.setText(String.valueOf(psLister.getProcessListSize()));
 
         TextView txtProcCount = (TextView) findViewById(R.id.txt_procCount);
-        txtProcCount.setText(String.valueOf(psLister.getProcessesAsList().size()));
+        txtProcCount.setText(String.valueOf(psLister.getProcessListSize()));
     }
 }
