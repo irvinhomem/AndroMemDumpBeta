@@ -10,4 +10,4 @@ The aim of this app is to collect process memory dumps, and store them either on
 - Listing running processes
     - Android 4.x (All processes)
     - Android 5.x, 6.x (All user processes. SELinux restricts system processes)
-    - Android 7.x (Only this app's process :-( ... due to SELinux restrictions on /proc))
+    - Android 7.x (Only this app's process :-( ... due to SELinux restrictions on /proc) in Android 7.x)
