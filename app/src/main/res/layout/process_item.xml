@@ -13,7 +13,7 @@
     -->
 
     <RadioButton
-        android:id="@+id/single_process_data"
+        android:id="@+id/rb_single_process_data"
         android:text=""
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
     <!-- android:id="@+id/contact_name" -->
 
     <Button
-        android:id="@+id/message_button"
+        android:id="@+id/btn_DumpProc"
         android:layout_width="45sp"
         android:layout_height="35sp"
         android:paddingLeft="0dp"

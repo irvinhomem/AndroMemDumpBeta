@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by irvin on 22/02/2017.
+ * Data Model for the Process List
  */
 
 public class ProcListItem {

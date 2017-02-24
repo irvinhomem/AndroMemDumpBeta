@@ -2,6 +2,7 @@ package com.zwerks.andromemdumpbeta;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
  */
 
 public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter.ViewHolder> {
+    private final String LOG_TAG = getClass().getSimpleName();
     //private ArrayList<String> mDataset;     // Variable with all the processes
     private ArrayList<ProcListItem> mDataset;     // Variable with all the processes
     //private ArrayList<ProcListItem> mHeadersLine;
@@ -29,14 +31,14 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
         // each data item is just a string in this case
         //public TextView mTextView;
         public RadioButton mRadioButton;
-        public Button msgButton; // Put a Button for fun ... to test each item
+        public Button btnDumpProc; // Put a Button for fun ... to test each item
 
         public ViewHolder(View view) {
             super(view);
             //mTextView = v;
             //mTextView = (TextView) view.findViewById(R.id.single_process_data);
-            mRadioButton = (RadioButton) view.findViewById(R.id.single_process_data);
-            msgButton = (Button) view.findViewById(R.id.message_button);
+            mRadioButton = (RadioButton) view.findViewById(R.id.rb_single_process_data);
+            btnDumpProc = (Button) view.findViewById(R.id.btn_DumpProc);
 
             //mTextView.setTextSize(10);
             mRadioButton.setTextSize(10);
@@ -84,8 +86,10 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
             int proc_id = procItem.getPid();
             String proc_name = procItem.getProc_name();
             //holder.mRadioButton.setTag(proc_id, proc_name);
-            holder.mRadioButton.setTag(proc_name);
-            holder.msgButton.setText("Dump");
+            //holder.mRadioButton.setTag(proc_id);
+            //holder.mRadioButton.setTag(proc_name);
+            holder.mRadioButton.setTag(procItem);
+            holder.btnDumpProc.setText("Dump");
         }
 
         // Code to ensure only a single Radio Button / Process item is selected
@@ -100,6 +104,29 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
             }
         };
         holder.mRadioButton.setOnClickListener(rbClick);
+
+        // Code to add onClickListener for the "Dump process" button
+        View.OnClickListener btnDumpProc_click = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Check for currently clicked Radiobutton and check for "Tag"
+                ViewGroup row = (ViewGroup) view.getParent();
+                RadioButton rb_selected = (RadioButton) row.findViewById(R.id.rb_single_process_data);
+                if (rb_selected.isChecked()){
+                    if(BuildConfig.DEBUG){
+                        ProcListItem proc_item = (ProcListItem)rb_selected.getTag();
+                        Log.d(LOG_TAG, "RB-Selected Tag: " + String.valueOf(proc_item.getPid()) +" - "+ proc_item.getProc_name() );
+                    }
+                    //Proceed to dump the selected process
+                } else{
+
+                }
+                //If none, show dialog that no process has been selected
+                //Else ask for dump location and start dumping
+                //RadioButton selected_rb = (RadioButton) view;
+            }
+        };
+        holder.btnDumpProc.setOnClickListener(btnDumpProc_click);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
