@@ -22,7 +22,7 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     private ArrayList<ProcListItem> mDataset;     // Variable with all the processes
     //private ArrayList<ProcListItem> mHeadersLine;
     //private Context mContext;               // Store the context for easy access
-    private RadioButton lastCheckedRB = null;
+    private ViewGroup mLastClickedRow_rb_btn = null;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -90,17 +90,32 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
             //holder.mRadioButton.setTag(proc_name);
             holder.mRadioButton.setTag(procItem);
             holder.btnDumpProc.setText("Dump");
+            //holder.btnDumpProc.setVisibility(View.INVISIBLE);
+            holder.btnDumpProc.setVisibility(View.GONE);
         }
 
         // Code to ensure only a single Radio Button / Process item is selected
         View.OnClickListener rbClick = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RadioButton curr_checked_rb = (RadioButton) view;
-                if(lastCheckedRB != null){
-                    lastCheckedRB.setChecked(false);
+                //Get Parent view of clicked item, so as to get Dump button and set visible
+                ViewGroup latest_click_row = (ViewGroup) view.getParent();
+
+                //RadioButton curr_checked_rb = (RadioButton) view;
+                //Check if there is already a View selected (i.e. a ViewGroup clicked before, and thus stored)
+                if(mLastClickedRow_rb_btn != null){
+                    //If yes "unselect" the old one in preparation to select the latest selected one
+                    RadioButton rb_LastClicked = (RadioButton) mLastClickedRow_rb_btn.findViewById(R.id.rb_single_process_data);
+                    Button btn_LastClicked = (Button)mLastClickedRow_rb_btn.findViewById(R.id.btn_DumpProc);
+                    rb_LastClicked.setChecked(false);
+                    btn_LastClicked.setVisibility(View.GONE);
                 }
-                lastCheckedRB = curr_checked_rb;
+                // Store the currently clicked View
+                mLastClickedRow_rb_btn = latest_click_row;
+                RadioButton rbCurrSelected = (RadioButton) latest_click_row.findViewById(R.id.rb_single_process_data);
+                rbCurrSelected.setChecked(true);
+                Button btnDump_selected = (Button) latest_click_row.findViewById(R.id.btn_DumpProc);
+                btnDump_selected.setVisibility(View.VISIBLE);
             }
         };
         holder.mRadioButton.setOnClickListener(rbClick);
@@ -118,7 +133,7 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
                         Log.d(LOG_TAG, "RB-Selected Tag: " + String.valueOf(proc_item.getPid()) +" - "+ proc_item.getProc_name() );
                     }
                     //Proceed to dump the selected process
-                } else{
+                } else{ //Throw a dialog to tell the user to select the right process, or a process.
 
                 }
                 //If none, show dialog that no process has been selected
