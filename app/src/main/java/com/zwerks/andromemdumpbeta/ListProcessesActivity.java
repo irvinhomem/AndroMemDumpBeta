@@ -37,8 +37,8 @@ public class ListProcessesActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Specify an adapter
-        psProcessLister psLister = new psProcessLister();
-        this.mAdapter = new ProcessRecyclerAdapter(psLister.getProcessesAsList());
+        psProcessLister psLister = new psProcessLister(this);
+        this.mAdapter = new ProcessRecyclerAdapter(this, psLister.getProcessesAsList());
         this.mRecyclerView.setAdapter(mAdapter);
 
         // Get the Headers from the Headers ArrayList

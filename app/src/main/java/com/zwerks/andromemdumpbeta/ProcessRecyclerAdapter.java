@@ -23,6 +23,14 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     //private ArrayList<ProcListItem> mHeadersLine;
     //private Context mContext;               // Store the context for easy access
     private ViewGroup mLastClickedRow_rb_btn = null;
+    // Store the context for easy access
+    private Context mContext;
+
+    //For accessing
+    static {
+        System.loadLibrary("memdump");
+    }
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -48,9 +56,10 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     // Provide a suitable constructor (depends on the kind of dataset)
     //public ProcessRecyclerAdapter(ArrayList<String> myDataset) {
     //public ProcessRecyclerAdapter(ArrayList<ProcListItem> myDataset, ArrayList<ProcListItem> headers) {
-    public ProcessRecyclerAdapter(ArrayList<ProcListItem> myDataset) {
+    public ProcessRecyclerAdapter(Context context, ArrayList<ProcListItem> myDataset) {
         //Assign the received dataset (arraylist) to the adapter's dataset property
         mDataset = myDataset;
+        mContext = context;
         //this.mHeadersLine = headers;
     }
 
@@ -77,7 +86,7 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
 
         //holder.mTextView.setText(String.valueOf(mDataset.get(position)));
         // Extract info items
-        ProcListItem procItem = mDataset.get(position);
+        final ProcListItem procItem = mDataset.get(position);
         holder.mRadioButton.setText(String.valueOf(procItem.getAllItems()));
         //holder.mRadioButton.setText(String.valueOf(mDataset.get(position)));
         if(procItem.getIsHeaderLine()){
@@ -132,6 +141,8 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
                         ProcListItem proc_item = (ProcListItem)rb_selected.getTag();
                         Log.d(LOG_TAG, "RB-Selected Tag: " + String.valueOf(proc_item.getPid()) +" - "+ proc_item.getProc_name() );
                     }
+                    //Dump Process Memory
+                    procItem.dumpProcessMemory();
                     //Proceed to dump the selected process
                 } else{ //Throw a dialog to tell the user to select the right process, or a process.
 
@@ -149,4 +160,9 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     public int getItemCount() {
         return mDataset.size();
     }
+/*
+    public dumpProcessMemory(ProcListItem processItem){
+        processItem.dumpMemory();
+    }
+*/
 }

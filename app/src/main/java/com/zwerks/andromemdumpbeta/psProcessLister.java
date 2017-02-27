@@ -1,5 +1,6 @@
 package com.zwerks.andromemdumpbeta;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -15,11 +16,12 @@ import java.util.regex.Pattern;
 
 public class psProcessLister {
     private String LOG_TAG = getClass().getSimpleName();
+    private Context mContext;
     private ArrayList<ProcListItem> processArrayList = new ArrayList<>();
     private ArrayList<ProcListItem> headerLine = new ArrayList<>();
 
-    public psProcessLister(){
-
+    public psProcessLister(Context context){
+        mContext = context;
     }
 
     public String getProcessListOutput(){
@@ -92,7 +94,7 @@ public class psProcessLister {
                 //processArrayList.add(singleLine);
                 //processArrayList.add(buffReader.readLine());
                 StringTokenizer tokenizer = new StringTokenizer(singleLine," ", false);
-                ProcListItem procItem = new ProcListItem();
+                ProcListItem procItem = new ProcListItem(mContext);
                 while(tokenizer.hasMoreTokens()){
                     procItem.append(tokenizer.nextToken());
                 }
