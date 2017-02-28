@@ -1,6 +1,7 @@
 package com.zwerks.andromemdumpbeta;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -11,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public String position_MemDumpExecutable(){
+    public void check_MemDumpExecutableLocation(){
         //Check if memdump executable is in the right location
         //If not place it in the right location
 
@@ -84,11 +88,28 @@ public class MainActivity extends AppCompatActivity {
             abi = Build.SUPPORTED_ABIS[0];
         }else{
             //noinspection deprecation
-            abi = Build.CPU_ABI;
+            abi = Build.CPU_ABI; // Deprecated from API level 21 and onwards
         }
 
-        String folder;
+        String folder ="";
+        if(abi.contains("armeabi-v7a")){
+            folder = "armeabi-v7a";
+        }else if(abi.contains("arm64-v8a")){
+            folder = "arm64-v8a";
+        }else if(abi.contains("x86_64")){
+            folder = "x86_64";
+        } else if (abi.contains("x86")) {
+            folder = "x86";
+        } else if (abi.contains("armeabi")) {
+            folder = "armeabi";
+        }
 
-        return
+        AssetManager assetManager = getAssets();
+        try {
+            InputStream in = assetManager.open(folder + "/" + "memdump");
+        }catch(IOException e){
+
+        }
+
     }
 }
