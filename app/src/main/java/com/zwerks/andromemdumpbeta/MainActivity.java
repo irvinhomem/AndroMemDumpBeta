@@ -1,6 +1,7 @@
 package com.zwerks.andromemdumpbeta;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
@@ -72,5 +73,22 @@ public class MainActivity extends AppCompatActivity {
     public void openProcessesListing(View view){
         Intent intent =  new Intent(this, ListProcessesActivity.class);
         startActivity(intent);
+    }
+
+    public String position_MemDumpExecutable(){
+        //Check if memdump executable is in the right location
+        //If not place it in the right location
+
+        String abi;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            abi = Build.SUPPORTED_ABIS[0];
+        }else{
+            //noinspection deprecation
+            abi = Build.CPU_ABI;
+        }
+
+        String folder;
+
+        return
     }
 }
