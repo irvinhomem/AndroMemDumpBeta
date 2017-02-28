@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,11 +14,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String LOG_TAG = getClass().getSimpleName();
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -107,6 +112,26 @@ public class MainActivity extends AppCompatActivity {
         AssetManager assetManager = getAssets();
         try {
             InputStream in = assetManager.open(folder + "/" + "memdump");
+
+            //Copy file to appropriate location
+            //this = context
+            OutputStream out = this.openFileOutput("memdump", MODE_PRIVATE);
+            long size = 0;
+            int nRead;
+            byte[] buff = new byte[50000];
+
+            while((nRead = in.read(buff)) != -1){
+                out.write(buff, 0 , nRead);
+                size += nRead;
+            }
+            out.flush();
+            Log.d(LOG_TAG, "Copy Success: " + size + " bytes");
+            File execFile = new File(this.getFilesDir() + "/" + "memdump");
+            boolean exec_success = execFile.setExecutable(true);
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, "Set file to executable = " + exec_success);
+            }
+            //execFile.setExecutable(true, false);
         }catch(IOException e){
 
         }
