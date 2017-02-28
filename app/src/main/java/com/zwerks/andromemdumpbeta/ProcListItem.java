@@ -71,8 +71,11 @@ public class ProcListItem {
         //this.getPid();
         //String dumpLocation = "/data/data/" + getClass().getPackage().getName();
         //String dumpLocation = mContext.getFilesDir().getPath() + mContext.getPackageName() + "/";
+        //String memdump_executable = "libmemdump.so";
+        String memdump_executable = "memdump";
+
         String dumpLocation = mContext.getFilesDir().getPath() + "/";
-        String memDumpExec = mContext.getFilesDir().getParent() + "/lib/" + "libmemdump.so";
+        String memDumpExec = mContext.getFilesDir().getParent() + "/lib/" + memdump_executable;
         //mContext.getApplicationInfo().nativeLibraryDir;
         //String memDumpExec = mContext.getApplicationInfo().nativeLibraryDir + "/" + "libmemdump.so";
         if(BuildConfig.DEBUG){
@@ -95,7 +98,7 @@ public class ProcListItem {
             String singleLine;
             while((singleLine = buffReader.readLine()) != null) {
                 if(BuildConfig.DEBUG){
-                    Log.d(LOG_TAG, "Dump Line Length;" + String.valueOf(singleLine.length()));
+                    Log.d(LOG_TAG, "Dump Line: " + String.valueOf(singleLine.length()) + String.valueOf(singleLine));
                 }
             }
             buffReader.close();
