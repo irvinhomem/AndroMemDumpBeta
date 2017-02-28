@@ -26,9 +26,9 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     // Store the context for easy access
     private Context mContext;
 
-    //For accessing
+    //For accessing the memdump library
     static {
-        System.loadLibrary("memdump");
+        //System.loadLibrary("memdump");
     }
 
 

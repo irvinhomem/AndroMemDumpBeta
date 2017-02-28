@@ -20,9 +20,13 @@ add_library( # Sets the name of the library.
              # file are automatically included.
              src/main/cpp/native-lib.cpp )
 
-add_library(memdump
-            SHARED
-            src/main/cpp/memdump.c)
+#add_library(memdump
+#            SHARED
+#            src/main/cpp/memdump.c)
+
+#set(EXECUTABLE_OUTPUT_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/src/main/assets/${ANDROID_ABI}")
+#set(EXECUTABLE_OUTPUT_PATH  "/src/main/assets/${ANDROID_ABI}")
+add_executable(memdump src/main/cpp/memdump.c)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because system libraries are included in the search path by
