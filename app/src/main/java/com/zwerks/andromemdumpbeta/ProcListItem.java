@@ -5,10 +5,12 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 
@@ -101,7 +103,6 @@ public class ProcListItem {
                 Log.d(LOG_TAG, "===================================");
             }
 
-
             //Process dumpingProcess = Runtime.getRuntime().exec(memDumpExec);
             String dumpFileName = "";
             /*
@@ -117,15 +118,42 @@ public class ProcListItem {
             dumpFileName = this.getProc_name();
             dumpFileName += ".dmp";
 
-            String memdump_Command = memDumpExecLoc + " " +
-                    String.valueOf(this.getPid()) + " > " + dumpWriteLocPath.getPath()+ "/"+ dumpFileName;
+            //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpWriteLocPath.getPath()+ "/"+ dumpFileName;
+            //String[] memdump_Command = {memDumpExecLoc, String.valueOf(this.getPid()), " \\> ", dumpWriteLocPath.getPath()+ "/"+ dumpFileName};
+            //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpFileName;
+            String[] memdump_Command = {memDumpExecLoc, String.valueOf(this.getPid())};
+            //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid());
+
             if(BuildConfig.DEBUG){
                 Log.d(LOG_TAG, "Dump FileName: " + dumpFileName);
-                Log.d(LOG_TAG, "MemDump Command: " + memdump_Command);
+                //Log.d(LOG_TAG, "MemDump Command: " + memdump_Command);
+                Log.d(LOG_TAG, "MemDump Command: " + Arrays.toString(memdump_Command));
             }
 
-            //Process dumpingProcess = Runtime.getRuntime().exec(memdump_Command);
-            Process dumpingProcess = Runtime.getRuntime().exec(memDumpExecLoc);
+            try {
+                Process root_proc = Runtime.getRuntime().exec("su");
+                DataOutputStream outputStream = new DataOutputStream(root_proc.getOutputStream());
+                InputStreamReader inStream = new InputStreamReader(root_proc.getInputStream());
+                BufferedReader buffRdr = new BufferedReader(inStream);
+
+                outputStream.writeBytes("id");
+                outputStream.flush();
+
+                String receivingLine;
+                while((receivingLine = buffRdr.readLine()) != null) {
+                    if(BuildConfig.DEBUG){
+                        Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
+                    }
+                }
+                buffRdr.close();
+                root_proc.waitFor();
+            }catch(Exception e){
+                Log.d(LOG_TAG, "Root didn't work: " + e.getMessage());
+            }
+
+
+            Process dumpingProcess = Runtime.getRuntime().exec(memdump_Command);
+            //Process dumpingProcess = Runtime.getRuntime().exec(memDumpExecLoc);
             //Process dumpingProcess = Runtime.getRuntime().exec("memdump " + String.valueOf(this.getPid()) + dumpLocation);
 
             InputStreamReader inStreamRdr = new InputStreamReader(dumpingProcess.getInputStream());
