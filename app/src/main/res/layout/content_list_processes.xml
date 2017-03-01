@@ -4,10 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.zwerks.andromemdumpbeta.ListProcessesActivity"
     tools:showIn="@layout/activity_list_processes" >
-    <!-- android:layout_below="@id/txt_HeaderTextLine" -->
+    <!-- android:layout_below="@id/txt_HeaderTextLine"
+    android:scrollbarTrackVertical=""
+    android:fadeScrollbars="true"
+    android:scrollbarFadeDuration="3"-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,7 +32,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/txt_HeaderTextLine" />
-        <!-- android:paddingTop="7dp" -->
+        <!-- android:paddingTop="7dp"
+         android:scrollbarStyle="insideOverlay"
+         android:fadeScrollbars="true"
+         android:fadeScrollbars="false"
+         android:scrollbarFadeDuration="0"
+         android:scrollbarAlwaysDrawVerticalTrack="true"
+         android:background="@android:color/transparent"
+         android:scrollbarTrackVertical="@color/colorPrimaryDark"
+         android:scrollbarThumbVertical="@android:color/darker_gray"
+         android:scrollbarSize="20dp"-->
 
         <TextView
             android:id="@+id/txt_process_list_output"

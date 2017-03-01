@@ -22,7 +22,7 @@ import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String LOG_TAG = getClass().getSimpleName();
+    private String LOG_TAG = getClass().getSimpleName(); //private final String
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //Check MemDump Location
+        check_MemDumpExecutableLocation();
 
         // Example of a call to a native method
         TextView tv = (TextView) findViewById(R.id.sample_text);
@@ -84,6 +87,20 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public boolean setMemDumpFile_asExectuable(String fileLoc){
+        /**/
+        File execFile = new File(fileLoc);
+        //Somewhat Safe
+        //boolean exec_success = execFile.setExecutable(true);
+        //Unsafe !!
+        boolean exec_success = execFile.setExecutable(true, false);
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "Set file to executable = " + exec_success);
+        }
+        /**/
+        return exec_success;
+    }
+
     public void check_MemDumpExecutableLocation(){
         //Check ABI (Android Binary Interface) compatibility with CPU / API Levels
         String abi;
@@ -97,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "ABI : " + abi);
         }
 
-        String folder ="";
+        String folder = "";
         if(abi.contains("armeabi-v7a")){
             folder = "armeabi-v7a";
         }else if(abi.contains("arm64-v8a")){
@@ -109,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (abi.contains("armeabi")) {
             folder = "armeabi";
         }
-        String memdumpLoc = this.getFilesDir() + "/" + "lib" +"/" + "memdump";
+        String memdumpLoc = this.getFilesDir() + "/"  + "memdump";
+        //String memdumpLoc = this.getFilesDir().getParent() + "/" + "lib" +"/" + "memdump";
         // Logging
         if(BuildConfig.DEBUG){
             Log.d(LOG_TAG, "Looking for Folder : " + folder);
@@ -122,12 +140,14 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Memdump file already in place");
         }else{
             //If not place it in the right location
+            Log.i(LOG_TAG, "File NOT in place. Starting copy process ...");
             AssetManager assetManager = getAssets();
             try {
                 InputStream in = assetManager.open(folder + "/" + "memdump");
 
                 //Copy file to appropriate location
                 //this = context
+                //this.openFileOutput <-- Directly puts the file into the "/files" directory
                 OutputStream out = this.openFileOutput("memdump", MODE_PRIVATE);
                 long size = 0;
                 int nRead;
@@ -139,16 +159,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 out.flush();
                 Log.d(LOG_TAG, "Copy Success: " + size + " bytes");
-                File execFile = new File(memdumpLoc);
-                boolean exec_success = execFile.setExecutable(true);
-                if(BuildConfig.DEBUG){
-                    Log.d(LOG_TAG, "Set file to executable = " + exec_success);
-                }
-                //execFile.setExecutable(true, false);
+
             }catch(IOException e){
 
             }
         }
+        this.setMemDumpFile_asExectuable(memdumpLoc);
 
 
     }

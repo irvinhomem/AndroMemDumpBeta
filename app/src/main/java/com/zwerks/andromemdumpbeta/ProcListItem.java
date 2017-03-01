@@ -1,12 +1,15 @@
 package com.zwerks.andromemdumpbeta;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 
 /**
@@ -54,7 +57,9 @@ public class ProcListItem {
 
     public String getProc_name(){
         if (procInfoItems.size() > 0){
-            this.proc_name = procInfoItems.get(procInfoItems.size()-1);
+            String unfiltered_name = procInfoItems.get(procInfoItems.size()-1);
+            //Use RegEx to remove special characters except the "." ... i.e maintaining alphanumeric and "."
+            this.proc_name = unfiltered_name.replaceAll("[^a-zA-Z0-9\\.]+","_");
         }
         return this.proc_name;
     }
@@ -74,22 +79,53 @@ public class ProcListItem {
         //String memdump_executable = "libmemdump.so";
         String memdump_executable = "memdump";
 
-        String dumpLocation = mContext.getFilesDir().getPath() + "/";
-        String memDumpExec = mContext.getFilesDir().getParent() + "/lib/" + memdump_executable;
+        //String dumpLocation = mContext.getFilesDir().getPath() + "/";
+        //String memDumpExec = mContext.getFilesDir().getParent() + "/lib/" + memdump_executable;
+        String memDumpExecLoc = mContext.getFilesDir() + "/" + memdump_executable;
         //mContext.getApplicationInfo().nativeLibraryDir;
         //String memDumpExec = mContext.getApplicationInfo().nativeLibraryDir + "/" + "libmemdump.so";
+        File dumpWriteLocPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        //String dumpWriteLoc = mContext.getExternalMediaDirs().toString();
         if(BuildConfig.DEBUG){
-            Log.d(LOG_TAG, "Dump Location: " + dumpLocation );
-            Log.d(LOG_TAG, "MemDump Executable Location: " + memDumpExec);
+            //Log.d(LOG_TAG, "Dump Location: " + dumpLocation );
+            //Log.d(LOG_TAG, "Dump Location: " + dumpWriteLocPath ); //SDCard root location
+            Log.d(LOG_TAG, "MemDump Executable Location: " + memDumpExecLoc);
+            Log.d(LOG_TAG, "Potential Dump OUTPUT Location: " + dumpWriteLocPath.getPath());
         }
 
         /**/
         try {
             if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, "===================================");
                 Log.d(LOG_TAG, "About to start Memdump ...");
+                Log.d(LOG_TAG, "===================================");
             }
-            Process dumpingProcess = Runtime.getRuntime().exec(memDumpExec);
 
+
+            //Process dumpingProcess = Runtime.getRuntime().exec(memDumpExec);
+            String dumpFileName = "";
+            /*
+            String[] proc_names = this.getProc_name().split("[.]");
+            Log.d(LOG_TAG, "ProcName: "+ this.getProc_name());
+            Log.d(LOG_TAG, "Number of name splits: " + proc_names.length);
+            if (proc_names.length > 1){
+                dumpFileName = proc_names[proc_names.length-2] + "." + proc_names[proc_names.length-1];
+            }else{
+                dumpFileName = this.getProc_name();
+            }
+            */
+            dumpFileName = this.getProc_name();
+            dumpFileName += ".dmp";
+
+            String memdump_Command = memDumpExecLoc + " " +
+                    String.valueOf(this.getPid()) + " > " + dumpWriteLocPath.getPath()+ "/"+ dumpFileName;
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, "Dump FileName: " + dumpFileName);
+                Log.d(LOG_TAG, "MemDump Command: " + memdump_Command);
+            }
+
+            //Process dumpingProcess = Runtime.getRuntime().exec(memdump_Command);
+            Process dumpingProcess = Runtime.getRuntime().exec(memDumpExecLoc);
             //Process dumpingProcess = Runtime.getRuntime().exec("memdump " + String.valueOf(this.getPid()) + dumpLocation);
 
             InputStreamReader inStreamRdr = new InputStreamReader(dumpingProcess.getInputStream());
@@ -112,6 +148,11 @@ public class ProcListItem {
 
         }
         /**/
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "***********************");
+            Log.d(LOG_TAG, "END OF Memdump ...");
+            Log.d(LOG_TAG, "***********************");
+        }
 
     }
 
