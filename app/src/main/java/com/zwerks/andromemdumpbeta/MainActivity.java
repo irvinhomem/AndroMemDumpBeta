@@ -85,15 +85,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void check_MemDumpExecutableLocation(){
-        //Check if memdump executable is in the right location
-        //If not place it in the right location
-
+        //Check ABI (Android Binary Interface) compatibility with CPU / API Levels
         String abi;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             abi = Build.SUPPORTED_ABIS[0];
         }else{
             //noinspection deprecation
             abi = Build.CPU_ABI; // Deprecated from API level 21 and onwards
+        }
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "ABI : " + abi);
         }
 
         String folder ="";
@@ -108,33 +109,47 @@ public class MainActivity extends AppCompatActivity {
         } else if (abi.contains("armeabi")) {
             folder = "armeabi";
         }
-
-        AssetManager assetManager = getAssets();
-        try {
-            InputStream in = assetManager.open(folder + "/" + "memdump");
-
-            //Copy file to appropriate location
-            //this = context
-            OutputStream out = this.openFileOutput("memdump", MODE_PRIVATE);
-            long size = 0;
-            int nRead;
-            byte[] buff = new byte[50000];
-
-            while((nRead = in.read(buff)) != -1){
-                out.write(buff, 0 , nRead);
-                size += nRead;
-            }
-            out.flush();
-            Log.d(LOG_TAG, "Copy Success: " + size + " bytes");
-            File execFile = new File(this.getFilesDir() + "/" + "memdump");
-            boolean exec_success = execFile.setExecutable(true);
-            if(BuildConfig.DEBUG){
-                Log.d(LOG_TAG, "Set file to executable = " + exec_success);
-            }
-            //execFile.setExecutable(true, false);
-        }catch(IOException e){
-
+        String memdumpLoc = this.getFilesDir() + "/" + "lib" +"/" + "memdump";
+        // Logging
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "Looking for Folder : " + folder);
+            Log.d(LOG_TAG, "Checking for Memdump in: " + memdumpLoc);
         }
+
+        //Check if memdump executable is in the right location
+        File memdumpFile = new File(memdumpLoc);
+        if(memdumpFile.exists()){
+            Log.d(LOG_TAG, "Memdump file already in place");
+        }else{
+            //If not place it in the right location
+            AssetManager assetManager = getAssets();
+            try {
+                InputStream in = assetManager.open(folder + "/" + "memdump");
+
+                //Copy file to appropriate location
+                //this = context
+                OutputStream out = this.openFileOutput("memdump", MODE_PRIVATE);
+                long size = 0;
+                int nRead;
+                byte[] buff = new byte[50000];
+
+                while((nRead = in.read(buff)) != -1){
+                    out.write(buff, 0 , nRead);
+                    size += nRead;
+                }
+                out.flush();
+                Log.d(LOG_TAG, "Copy Success: " + size + " bytes");
+                File execFile = new File(memdumpLoc);
+                boolean exec_success = execFile.setExecutable(true);
+                if(BuildConfig.DEBUG){
+                    Log.d(LOG_TAG, "Set file to executable = " + exec_success);
+                }
+                //execFile.setExecutable(true, false);
+            }catch(IOException e){
+
+            }
+        }
+
 
     }
 }
