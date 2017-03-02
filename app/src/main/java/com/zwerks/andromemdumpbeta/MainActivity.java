@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
@@ -181,27 +182,41 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "==========");
             }
             //Process root_proc = Runtime.getRuntime().exec("/system/xbin/su root");
-            Process root_proc = Runtime.getRuntime().exec("/system/xbin/su -c id");
-            //DataOutputStream outputStream = new DataOutputStream(root_proc.getOutputStream());
-
-            //outputStream.writeBytes("id");
-            //outputStream.flush();
-
+            //Process root_proc = Runtime.getRuntime().exec("/system/xbin/su -c id");
+            //Process root_proc = Runtime.getRuntime().exec("/system/xbin/su");
+            Process root_proc = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(root_proc.getOutputStream());
             InputStreamReader inStream = new InputStreamReader(root_proc.getInputStream());
             BufferedReader buffRdr = new BufferedReader(inStream);
 
-            String receivingLine;
+            outputStream.writeBytes("id \n");
+            outputStream.flush();
+
+            String receivingLine = null;
+
+            receivingLine = buffRdr.readLine();
+            Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
+
+            outputStream.writeBytes(this.getFilesDir().getPath() +"/memdump \n");
+            outputStream.flush();
+
+            receivingLine = buffRdr.readLine();
+            Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
+            /*
             while((receivingLine = buffRdr.readLine()) != null) {
                 if(BuildConfig.DEBUG){
                     Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
                 }
             }
+            */
             buffRdr.close();
+            /*
             try {
                 root_proc.waitFor();
             }catch (InterruptedException e){
 
             }
+            */
         }catch(IOException e){
             Log.d(LOG_TAG, "Root didn't work: " + e.getMessage());
             e.printStackTrace();
