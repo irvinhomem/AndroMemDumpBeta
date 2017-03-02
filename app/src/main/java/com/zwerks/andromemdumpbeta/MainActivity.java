@@ -202,13 +202,13 @@ public class MainActivity extends AppCompatActivity {
 
             receivingLine = buffRdr.readLine();
             Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
-            /*
+            /**/
             while((receivingLine = buffRdr.readLine()) != null) {
                 if(BuildConfig.DEBUG){
                     Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
                 }
             }
-            */
+            /**/
             buffRdr.close();
             /*
             try {
