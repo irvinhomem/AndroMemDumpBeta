@@ -15,9 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
@@ -166,6 +168,44 @@ public class MainActivity extends AppCompatActivity {
         }
         this.setMemDumpFile_asExectuable(memdumpLoc);
 
+
+    }
+
+    public void checkRoot(View view){
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
+        try {
+            if(BuildConfig.DEBUG) {
+                Log.d(LOG_TAG, "==========");
+                Log.d(LOG_TAG, "Root stuff");
+                Log.d(LOG_TAG, "==========");
+            }
+            //Process root_proc = Runtime.getRuntime().exec("/system/xbin/su root");
+            Process root_proc = Runtime.getRuntime().exec("/system/xbin/su -c id");
+            //DataOutputStream outputStream = new DataOutputStream(root_proc.getOutputStream());
+
+            //outputStream.writeBytes("id");
+            //outputStream.flush();
+
+            InputStreamReader inStream = new InputStreamReader(root_proc.getInputStream());
+            BufferedReader buffRdr = new BufferedReader(inStream);
+
+            String receivingLine;
+            while((receivingLine = buffRdr.readLine()) != null) {
+                if(BuildConfig.DEBUG){
+                    Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
+                }
+            }
+            buffRdr.close();
+            try {
+                root_proc.waitFor();
+            }catch (InterruptedException e){
+
+            }
+        }catch(IOException e){
+            Log.d(LOG_TAG, "Root didn't work: " + e.getMessage());
+            e.printStackTrace();
+        }
 
     }
 }

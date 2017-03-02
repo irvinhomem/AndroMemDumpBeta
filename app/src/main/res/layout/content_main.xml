@@ -30,4 +30,15 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="35dp" />
 
+    <Button
+        android:id="@+id/btnTestRoot"
+        android:text="@string/str_btnTestRoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/btnOpenListProcesses"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="checkRoot"/>
+
 </RelativeLayout>

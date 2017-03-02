@@ -7,6 +7,7 @@
 
     <!-- MainActivity Strings -->
     <string name="str_btnOpenListProcesses">List Processes</string>
+    <string name="str_btnTestRoot">Test Root</string>
 
     <!-- ListProcessActivity Strings -->
     <string name="lblStatistics">Statistics:</string>

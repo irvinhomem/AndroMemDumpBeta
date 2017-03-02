@@ -130,28 +130,9 @@ public class ProcListItem {
                 Log.d(LOG_TAG, "MemDump Command: " + Arrays.toString(memdump_Command));
             }
 
-            try {
-                Process root_proc = Runtime.getRuntime().exec("su");
-                DataOutputStream outputStream = new DataOutputStream(root_proc.getOutputStream());
-                InputStreamReader inStream = new InputStreamReader(root_proc.getInputStream());
-                BufferedReader buffRdr = new BufferedReader(inStream);
-
-                outputStream.writeBytes("id");
-                outputStream.flush();
-
-                String receivingLine;
-                while((receivingLine = buffRdr.readLine()) != null) {
-                    if(BuildConfig.DEBUG){
-                        Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
-                    }
-                }
-                buffRdr.close();
-                root_proc.waitFor();
-            }catch(Exception e){
-                Log.d(LOG_TAG, "Root didn't work: " + e.getMessage());
-            }
 
 
+            /**/
             Process dumpingProcess = Runtime.getRuntime().exec(memdump_Command);
             //Process dumpingProcess = Runtime.getRuntime().exec(memDumpExecLoc);
             //Process dumpingProcess = Runtime.getRuntime().exec("memdump " + String.valueOf(this.getPid()) + dumpLocation);
@@ -171,18 +152,23 @@ public class ProcListItem {
             }catch (InterruptedException e){
                 Log.e(LOG_TAG,"Caught InterruptedException", new RuntimeException(e));
             }
+            /**/
 
         }catch(IOException e){
 
         }
+        /**/
         /**/
         if(BuildConfig.DEBUG){
             Log.d(LOG_TAG, "***********************");
             Log.d(LOG_TAG, "END OF Memdump ...");
             Log.d(LOG_TAG, "***********************");
         }
+            /**/
 
     }
+
+
 
 
 }
