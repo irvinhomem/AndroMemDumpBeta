@@ -204,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
             receivingLine = buffRdr.readLine();
             Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
             */
+            outputStream.writeBytes("uname -a \n");
+            outputStream.flush();
+
             outputStream.writeBytes("ls -al "+ this.getFilesDir().getPath() +" \n");
             outputStream.flush();
             /*
