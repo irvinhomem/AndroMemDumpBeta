@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         File execFile = new File(fileLoc);
         //Somewhat Safe
         //boolean exec_success = execFile.setExecutable(true);
-        //Unsafe !!
+        //*** UNSAFE *** !! NEED TO FIND A BETTER SOLUTION
         boolean exec_success = execFile.setExecutable(true, false);
         if(BuildConfig.DEBUG){
             Log.d(LOG_TAG, "Set file to executable = " + exec_success);
