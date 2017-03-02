@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.CharBuffer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -193,15 +194,26 @@ public class MainActivity extends AppCompatActivity {
             outputStream.flush();
 
             String receivingLine = null;
-
+            /*
             receivingLine = buffRdr.readLine();
             Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
-
+            */
             outputStream.writeBytes(this.getFilesDir().getPath() +"/memdump \n");
             outputStream.flush();
-
+            /*
             receivingLine = buffRdr.readLine();
             Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
+            */
+            outputStream.writeBytes("ls -al "+ this.getFilesDir().getPath() +" \n");
+            outputStream.flush();
+            /*
+            char[] receivedInput ={};
+            int bufferOffset = 0;
+            if(buffRdr.ready()){
+                int readCount = buffRdr.read(receivedInput, bufferOffset, 1024);
+            }
+            Log.d(LOG_TAG, "Root Output  " + String.valueOf(receivedInput.length) + String.valueOf(receivedInput));
+            */
             /**/
             while((receivingLine = buffRdr.readLine()) != null) {
                 if(BuildConfig.DEBUG){
@@ -209,14 +221,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             /**/
+            /**/
             buffRdr.close();
-            /*
+            /**/
             try {
                 root_proc.waitFor();
             }catch (InterruptedException e){
-
+                Log.e(LOG_TAG, "Caught Interrupted Exception");
             }
-            */
+            /**/
         }catch(IOException e){
             Log.d(LOG_TAG, "Root didn't work: " + e.getMessage());
             e.printStackTrace();
