@@ -218,11 +218,24 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Root Output  " + String.valueOf(receivedInput.length) + String.valueOf(receivedInput));
             */
             /**/
+            Thread t = new Thread(){
+                public void run(){
+
+                }
+            };
+            /*
             while((receivingLine = buffRdr.readLine()) != null) {
+                //buffRdr.lines() ".lines only avaiable in API 24 onwards"
                 if(BuildConfig.DEBUG){
                     Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
                 }
+                /*
+                if(buffRdr.read() < 0){
+                    break;
+                }
+                */
             }
+            */
             /**/
             /**/
             buffRdr.close();
