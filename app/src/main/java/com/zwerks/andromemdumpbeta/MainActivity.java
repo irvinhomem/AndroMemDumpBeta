@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 //Toast myRootToast_feedback = Toast.makeText(mContext, "Root is Available.", Toast.LENGTH_LONG);
                 Toast myRootToast_feedback = Toast.makeText(MainActivity.this, toast_text, Toast.LENGTH_LONG);
                 myRootToast_feedback.show();
-                myRootToast_feedback.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+                myRootToast_feedback.setGravity(Gravity.CENTER|Gravity.CENTER_HORIZONTAL, 0, 0);
             }
         });
     }
