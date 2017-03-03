@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -174,82 +176,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkRoot(View view){
-        //Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
-        try {
-            if(BuildConfig.DEBUG) {
-                Log.d(LOG_TAG, "==========");
-                Log.d(LOG_TAG, "Root stuff");
-                Log.d(LOG_TAG, "==========");
-            }
-            //Process root_proc = Runtime.getRuntime().exec("/system/xbin/su root");
-            //Process root_proc = Runtime.getRuntime().exec("/system/xbin/su -c id");
-            //Process root_proc = Runtime.getRuntime().exec("/system/xbin/su");
-            Process root_proc = Runtime.getRuntime().exec("su");
-            DataOutputStream outputStream = new DataOutputStream(root_proc.getOutputStream());
-            InputStreamReader inStream = new InputStreamReader(root_proc.getInputStream());
-            BufferedReader buffRdr = new BufferedReader(inStream);
-
-            outputStream.writeBytes("id \n");
-            outputStream.flush();
-
-            String receivingLine = null;
-            /*
-            receivingLine = buffRdr.readLine();
-            Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
-            */
-            outputStream.writeBytes(this.getFilesDir().getPath() +"/memdump \n");
-            outputStream.flush();
-            /*
-            receivingLine = buffRdr.readLine();
-            Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
-            */
-            outputStream.writeBytes("uname -a \n");
-            outputStream.flush();
-
-            outputStream.writeBytes("ls -al "+ this.getFilesDir().getPath() +" \n");
-            outputStream.flush();
-            /*
-            char[] receivedInput ={};
-            int bufferOffset = 0;
-            if(buffRdr.ready()){
-                int readCount = buffRdr.read(receivedInput, bufferOffset, 1024);
-            }
-            Log.d(LOG_TAG, "Root Output  " + String.valueOf(receivedInput.length) + String.valueOf(receivedInput));
-            */
-            /**/
-            Thread t = new Thread(){
-                public void run(){
-
-                }
-            };
-            /*
-            while((receivingLine = buffRdr.readLine()) != null) {
-                //buffRdr.lines() ".lines only avaiable in API 24 onwards"
-                if(BuildConfig.DEBUG){
-                    Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
-                }
-                /*
-                if(buffRdr.read() < 0){
-                    break;
-                }
-                */
-            }
-            */
-            /**/
-            /**/
-            buffRdr.close();
-            /**/
-            try {
-                root_proc.waitFor();
-            }catch (InterruptedException e){
-                Log.e(LOG_TAG, "Caught Interrupted Exception");
-            }
-            /**/
-        }catch(IOException e){
-            Log.d(LOG_TAG, "Root didn't work: " + e.getMessage());
-            e.printStackTrace();
-        }
+        RootChecker su_check = new RootChecker(this);
+        //su_check.run();
+        Thread su_check_thread = new Thread(su_check, "RootCheckerThread");
+        su_check_thread.start();
+        //this.runOnUiThread(showToast);
 
     }
-}
+
+    /**/
+    public void showToast(final String toast)
+    {
+        runOnUiThread(new Runnable() {
+            public void run()
+            {
+                //Toast myRootToast_feedback = Toast.makeText(mContext, "Root is Available.", Toast.LENGTH_LONG);
+                Toast myRootToast_feedback = Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show());
+                myRootToast_feedback.show();
+                myRootToast_feedback.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+            }
+        });
+    }
+    /**/
+
+    }
