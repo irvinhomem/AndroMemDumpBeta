@@ -21,11 +21,11 @@ import java.io.InputStreamReader;
 
 public class RootChecker implements Runnable {
     private String LOG_TAG = getClass().getSimpleName();
-    private Activity mCallingActivity;
+    private MainActivity mCallingActivity;
 
     //BufferedReader buffRdr;
 
-    public RootChecker(Activity calling_activity){
+    public RootChecker(MainActivity calling_activity){
         mCallingActivity = calling_activity;
     }
 
@@ -90,8 +90,8 @@ public class RootChecker implements Runnable {
                 if (receivingLine.contains("uid=0")){
                     //Using Regex or string contains method above
 
-                    mCallingActivity.showToast("Testing");
-                    /*BELOW: ACTUALLY WORKS */
+                    mCallingActivity.showToast("Root / SU is available ...");
+                    /*BELOW: ACTUALLY WORKS ALSO*/
                     /*
                     mCallingActivity.runOnUiThread(new Runnable() {
                         public void run() {

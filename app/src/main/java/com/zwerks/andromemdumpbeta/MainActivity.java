@@ -185,13 +185,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**/
-    public void showToast(final String toast)
+    public void showToast(final String toast_text)
     {
         runOnUiThread(new Runnable() {
             public void run()
             {
                 //Toast myRootToast_feedback = Toast.makeText(mContext, "Root is Available.", Toast.LENGTH_LONG);
-                Toast myRootToast_feedback = Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show());
+                Toast myRootToast_feedback = Toast.makeText(MainActivity.this, toast_text, Toast.LENGTH_LONG);
                 myRootToast_feedback.show();
                 myRootToast_feedback.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
             }
