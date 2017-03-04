@@ -1,0 +1,127 @@
+package com.zwerks.andromemdumpbeta;
+
+import android.content.Context;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+/**
+ * Created by irvin on 04/03/2017.
+ */
+
+public class MemDumper implements Runnable {
+    private String LOG_TAG = getClass().getSimpleName();
+    private Context mContext;
+    private ProcListItem procItem;
+
+    public MemDumper(Context context, ProcListItem procListItem){
+        mContext = context;
+        procItem = procListItem;
+    }
+
+    @Override
+    public void run() {
+
+    }
+
+    public void dumpProcessMemory(){
+        //this.getPid();
+        //String dumpLocation = "/data/data/" + getClass().getPackage().getName();
+        //String dumpLocation = mContext.getFilesDir().getPath() + mContext.getPackageName() + "/";
+        //String memdump_executable = "libmemdump.so";
+        String memdump_executable = "memdump";
+
+        //String dumpLocation = mContext.getFilesDir().getPath() + "/";
+        //String memDumpExec = mContext.getFilesDir().getParent() + "/lib/" + memdump_executable;
+        String memDumpExecLoc = mContext.getFilesDir() + "/" + memdump_executable;
+        //mContext.getApplicationInfo().nativeLibraryDir;
+        //String memDumpExec = mContext.getApplicationInfo().nativeLibraryDir + "/" + "libmemdump.so";
+
+        //File dumpWriteLocPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File[] dumpWriteLocPath = mContext.getExternalFilesDirs();
+        //String dumpWriteLoc = mContext.getExternalMediaDirs().toString();
+        if(BuildConfig.DEBUG){
+            //Log.d(LOG_TAG, "Dump Location: " + dumpLocation );
+            //Log.d(LOG_TAG, "Dump Location: " + dumpWriteLocPath ); //SDCard root location
+            Log.d(LOG_TAG, "MemDump Executable Location: " + memDumpExecLoc);
+            Log.d(LOG_TAG, "Potential Dump OUTPUT Location: " + dumpWriteLocPath.getPath());
+        }
+
+        /**/
+        try {
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, "===================================");
+                Log.d(LOG_TAG, "About to start Memdump ...");
+                Log.d(LOG_TAG, "===================================");
+            }
+
+            //Process dumpingProcess = Runtime.getRuntime().exec(memDumpExec);
+            String dumpFileName = "";
+            /*
+            String[] proc_names = this.getProc_name().split("[.]");
+            Log.d(LOG_TAG, "ProcName: "+ this.getProc_name());
+            Log.d(LOG_TAG, "Number of name splits: " + proc_names.length);
+            if (proc_names.length > 1){
+                dumpFileName = proc_names[proc_names.length-2] + "." + proc_names[proc_names.length-1];
+            }else{
+                dumpFileName = this.getProc_name();
+            }
+            */
+            dumpFileName = this.getProc_name();
+            dumpFileName += ".dmp";
+
+            //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpWriteLocPath.getPath()+ "/"+ dumpFileName;
+            //String[] memdump_Command = {memDumpExecLoc, String.valueOf(this.getPid()), " \\> ", dumpWriteLocPath.getPath()+ "/"+ dumpFileName};
+            //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpFileName;
+            String[] memdump_Command = {memDumpExecLoc, String.valueOf(this.getPid())};
+            //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid());
+
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, "Dump FileName: " + dumpFileName);
+                //Log.d(LOG_TAG, "MemDump Command: " + memdump_Command);
+                Log.d(LOG_TAG, "MemDump Command: " + Arrays.toString(memdump_Command));
+            }
+
+
+
+            /**/
+            Process dumpingProcess = Runtime.getRuntime().exec(memdump_Command);
+            //Process dumpingProcess = Runtime.getRuntime().exec(memDumpExecLoc);
+            //Process dumpingProcess = Runtime.getRuntime().exec("memdump " + String.valueOf(this.getPid()) + dumpLocation);
+
+            InputStreamReader inStreamRdr = new InputStreamReader(dumpingProcess.getInputStream());
+            BufferedReader buffReader = new BufferedReader(inStreamRdr);
+
+            String singleLine;
+            while((singleLine = buffReader.readLine()) != null) {
+                if(BuildConfig.DEBUG){
+                    Log.d(LOG_TAG, "Dump Line: " + String.valueOf(singleLine.length()) + String.valueOf(singleLine));
+                }
+            }
+            buffReader.close();
+            try {
+                dumpingProcess.waitFor();
+            }catch (InterruptedException e){
+                Log.e(LOG_TAG,"Caught InterruptedException", new RuntimeException(e));
+            }
+            /**/
+
+        }catch(IOException e){
+
+        }
+        /**/
+        /**/
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "***********************");
+            Log.d(LOG_TAG, "END OF Memdump ...");
+            Log.d(LOG_TAG, "***********************");
+        }
+            /**/
+
+    }
+}

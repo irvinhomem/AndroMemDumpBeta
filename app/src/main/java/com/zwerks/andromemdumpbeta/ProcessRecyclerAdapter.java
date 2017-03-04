@@ -142,7 +142,7 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
                         Log.d(LOG_TAG, "RB-Selected Tag: " + String.valueOf(proc_item.getPid()) +" - "+ proc_item.getProc_name() );
                     }
                     //Dump Process Memory
-                    procItem.dumpProcessMemory();
+                    procItem.dumpProcMem();
                     //Proceed to dump the selected process
                 } else{ //Throw a dialog to tell the user to select the right process, or a process.
 
