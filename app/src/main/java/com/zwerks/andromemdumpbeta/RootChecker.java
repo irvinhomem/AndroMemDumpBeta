@@ -87,7 +87,8 @@ public class RootChecker implements Runnable {
                     Log.d(LOG_TAG, "Root Output Line: " + String.valueOf(receivingLine.length()) + String.valueOf(receivingLine));
                 }
                 //receivingLine.matches("uid=0|gid=0"
-                if (receivingLine.contains("uid=0")){
+                //if (receivingLine.contains("uid=0")){
+                if (receivingLine.matches(".*uid=0.*|.*gid=0.*")){
                     //Using Regex or string contains method above
 
                     mCallingActivity.showToast("Root / SU is available ...");
