@@ -75,6 +75,9 @@ public class ProcListItem {
     }
 
     public void dumpProcMem(){
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "Preparing MemDumper ...");
+        }
         MemDumper mem_dumper =  new MemDumper(this.mContext, this);
         mem_dumper.run();
     }

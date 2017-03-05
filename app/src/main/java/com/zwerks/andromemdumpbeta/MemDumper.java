@@ -2,6 +2,7 @@ package com.zwerks.andromemdumpbeta;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -30,7 +31,12 @@ public class MemDumper implements Runnable {
 
     @Override
     public void run() {
-
+        if(BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "_________________");
+            Log.d(LOG_TAG, "Preparing for Dump ...");
+            Log.d(LOG_TAG, "-----------------");
+        }
+        dumpProcessMemory();
     }
 
     public void dumpProcessMemory(){
@@ -46,21 +52,28 @@ public class MemDumper implements Runnable {
         //mContext.getApplicationInfo().nativeLibraryDir;
         //String memDumpExec = mContext.getApplicationInfo().nativeLibraryDir + "/" + "libmemdump.so";
 
-        //File dumpWriteLocPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File dumpWriteLocPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "Ext Dir #: " + dumpWriteLocPath.getPath());
+        }
+        /*
         String locations;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            File[] dumpWriteLocPath = mContext.getExternalFilesDirs(null);
-            locations = dumpWriteLocPath.toString();
+            File[] dumpWriteLocPath = mContext.getExternalFilesDirs(Environment.DIRECTORY_DOWNLOADS);
+            locations = Arrays.toString(dumpWriteLocPath);
             if(BuildConfig.DEBUG){
-                Log.d(LOG_TAG, "Locations < API 19: " + locations);
+                Log.d(LOG_TAG, "Locations #: " + String.valueOf(dumpWriteLocPath.length));
+                Log.d(LOG_TAG, "Locations >= API 19: " + locations);
             }
         } else{
             List<StorageUtils.StorageInfo> StorageLocations = StorageUtils.getStorageList();
             locations = StorageLocations.toString();
             if(BuildConfig.DEBUG){
-                Log.d(LOG_TAG,"Locations >= API 19: " + locations);
+                Log.d(LOG_TAG,"Locations < API 19: " + locations);
             }
         }
+        */
+
         //String dumpWriteLoc = mContext.getExternalMediaDirs().toString();
         if(BuildConfig.DEBUG){
             //Log.d(LOG_TAG, "Dump Location: " + dumpLocation );
