@@ -79,7 +79,10 @@ public class ProcListItem {
             Log.d(LOG_TAG, "Preparing MemDumper ...");
         }
         MemDumper mem_dumper =  new MemDumper(this.mContext, this);
-        mem_dumper.run();
+        Thread myDumpThread = new Thread(mem_dumper, "Proc_MemDumper");
+        myDumpThread.start();
+
+        //mem_dumper.run();
     }
 
 
