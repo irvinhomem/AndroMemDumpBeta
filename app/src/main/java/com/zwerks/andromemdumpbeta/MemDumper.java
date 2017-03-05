@@ -1,6 +1,7 @@
 package com.zwerks.andromemdumpbeta;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -8,7 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringTokenizer;
+
+import static android.os.Build.VERSION.SDK;
 
 /**
  * Created by irvin on 04/03/2017.
@@ -17,11 +21,11 @@ import java.util.StringTokenizer;
 public class MemDumper implements Runnable {
     private String LOG_TAG = getClass().getSimpleName();
     private Context mContext;
-    private ProcListItem procItem;
+    private ProcListItem mProcItem;
 
     public MemDumper(Context context, ProcListItem procListItem){
         mContext = context;
-        procItem = procListItem;
+        mProcItem = procListItem;
     }
 
     @Override
@@ -43,13 +47,28 @@ public class MemDumper implements Runnable {
         //String memDumpExec = mContext.getApplicationInfo().nativeLibraryDir + "/" + "libmemdump.so";
 
         //File dumpWriteLocPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File[] dumpWriteLocPath = mContext.getExternalFilesDirs();
+        String locations;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            File[] dumpWriteLocPath = mContext.getExternalFilesDirs(null);
+            locations = dumpWriteLocPath.toString();
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, "Locations < API 19: " + locations);
+            }
+        } else{
+            List<StorageUtils.StorageInfo> StorageLocations = StorageUtils.getStorageList();
+            locations = StorageLocations.toString();
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG,"Locations >= API 19: " + locations);
+            }
+        }
         //String dumpWriteLoc = mContext.getExternalMediaDirs().toString();
         if(BuildConfig.DEBUG){
             //Log.d(LOG_TAG, "Dump Location: " + dumpLocation );
             //Log.d(LOG_TAG, "Dump Location: " + dumpWriteLocPath ); //SDCard root location
             Log.d(LOG_TAG, "MemDump Executable Location: " + memDumpExecLoc);
+            /*
             Log.d(LOG_TAG, "Potential Dump OUTPUT Location: " + dumpWriteLocPath.getPath());
+            */
         }
 
         /**/
@@ -72,13 +91,13 @@ public class MemDumper implements Runnable {
                 dumpFileName = this.getProc_name();
             }
             */
-            dumpFileName = this.getProc_name();
+            dumpFileName = mProcItem.getProc_name();
             dumpFileName += ".dmp";
 
             //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpWriteLocPath.getPath()+ "/"+ dumpFileName;
             //String[] memdump_Command = {memDumpExecLoc, String.valueOf(this.getPid()), " \\> ", dumpWriteLocPath.getPath()+ "/"+ dumpFileName};
             //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpFileName;
-            String[] memdump_Command = {memDumpExecLoc, String.valueOf(this.getPid())};
+            String[] memdump_Command = {memDumpExecLoc, String.valueOf(mProcItem.getPid())};
             //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid());
 
             if(BuildConfig.DEBUG){

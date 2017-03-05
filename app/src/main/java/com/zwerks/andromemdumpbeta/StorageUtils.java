@@ -21,14 +21,15 @@ import java.util.StringTokenizer;
 
 public class StorageUtils {
 
-    private final String LOG_TAG = getClass().getSimpleName();
+    //private String simpleClassName = getClass().getSimpleName();
+    private static final String LOG_TAG = "StorageUtils";
 
-    public class StorageInfo {
+    public static class StorageInfo {
 
-        private String path;
-        private boolean readonly;
-        private boolean removable;
-        private int number;
+        public final String path;
+        public final boolean readonly;
+        public final boolean removable;
+        public final int number;
 
         StorageInfo(String path, boolean readonly, boolean removable, int number) {
             this.path = path;
@@ -53,7 +54,7 @@ public class StorageUtils {
         }
     }
 
-    public List<StorageInfo> getStorageList() {
+    public static List<StorageInfo> getStorageList() {
 
         List<StorageInfo> list = new ArrayList<StorageInfo>();
         String def_path = Environment.getExternalStorageDirectory().getPath();
