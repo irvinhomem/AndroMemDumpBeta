@@ -6,8 +6,11 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
@@ -84,7 +87,8 @@ public class MemDumper implements Runnable {
             Log.d(LOG_TAG, "Potential Dump OUTPUT Location: " + dumpWriteLocPath.getPath());
         }
 
-        /**/
+        this.checkExternalMedia();
+
         try {
             if(BuildConfig.DEBUG){
                 Log.d(LOG_TAG, "===================================");
@@ -126,14 +130,45 @@ public class MemDumper implements Runnable {
 
             InputStreamReader inStreamRdr = new InputStreamReader(dumpingProcess.getInputStream());
             BufferedReader buffReader = new BufferedReader(inStreamRdr);
+            ////ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
+            //Reading out as lines
+            /**/
             String singleLine;
             while((singleLine = buffReader.readLine()) != null) {
                 if(BuildConfig.DEBUG){
                     Log.d(LOG_TAG, "Dump Line: " + String.valueOf(singleLine.length()) + String.valueOf(singleLine));
                 }
             }
-            buffReader.close();
+            /**/
+
+            /**/
+            InputStream inStr = dumpingProcess.getInputStream();
+            byte[] aByteBuff = new byte[1024];
+            File dumpOutputFileDir = new File(dumpWriteLocPath.getPath() + "/MEMORY_DUMP");
+            boolean dirSuccess = dumpOutputFileDir.mkdir();
+            File dumpOutputFile = new File(dumpOutputFileDir + dumpFileName);
+            //dumpOutputFile.createNewFile();
+            FileOutputStream dumpFile =  new FileOutputStream(dumpOutputFile);
+
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, "Data Available: " + inStr.available());
+            }
+
+            double byteCounter = 0;
+            int bytesRead;
+            while((bytesRead = inStr.read(aByteBuff, 0, aByteBuff.length)) != -1){
+                if(BuildConfig.DEBUG){
+                    Log.d(LOG_TAG, "Got Data: " + String.valueOf(aByteBuff));
+                }
+                dumpFile.write(aByteBuff, 0 , bytesRead);
+                //Keeping track of "Write" progress
+                byteCounter++;
+            }
+            Log.i(LOG_TAG, "File Size: " + byteCounter);
+
+            /**/
+            //buffReader.close();
             try {
                 dumpingProcess.waitFor();
             }catch (InterruptedException e){
@@ -153,5 +188,24 @@ public class MemDumper implements Runnable {
         }
             /**/
 
+    }
+
+    private void checkExternalMedia(){
+        boolean mExternalStorageAvailable = false;
+        boolean mExternalStorageWriteable = false;
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // Can read and write the media
+            mExternalStorageAvailable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            // Can only read the media
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            // Can't read or write
+            mExternalStorageAvailable = mExternalStorageWriteable = false;
+        }
+        Log.i(LOG_TAG, "External Media: readable="+mExternalStorageAvailable+" writable="+mExternalStorageWriteable);
     }
 }
