@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -116,21 +117,28 @@ public class MemDumper implements Runnable {
             //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpWriteLocPath.getPath()+ "/"+ dumpFileName;
             //String[] memdump_Command = {memDumpExecLoc, String.valueOf(this.getPid()), " \\> ", dumpWriteLocPath.getPath()+ "/"+ dumpFileName};
             //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid()) + " > " + dumpFileName;
-            String[] memdump_Command = {memDumpExecLoc, String.valueOf(mProcItem.getPid())}; // Will handle Redirection of StdIn from Memdump to store as file afterwards
-            //String memdump_Command = memDumpExecLoc + " " + String.valueOf(this.getPid());
+            //String[] memdump_Command = {memDumpExecLoc, String.valueOf(mProcItem.getPid())}; // Will handle Redirection of StdIn from Memdump to store as file afterwards
+            String memdump_Command = memDumpExecLoc + " " + String.valueOf(mProcItem.getPid());
 
             if(BuildConfig.DEBUG){
                 Log.d(LOG_TAG, "Dump FileName: " + dumpFileName);
-                //Log.d(LOG_TAG, "MemDump Command: " + memdump_Command);
-                Log.d(LOG_TAG, "MemDump Command: " + Arrays.toString(memdump_Command));
+                Log.d(LOG_TAG, "MemDump Command: " + memdump_Command);
+                //Log.d(LOG_TAG, "MemDump Command: " + Arrays.toString(memdump_Command));
             }
 
             /**/
-            Process dumpingProcess = Runtime.getRuntime().exec(memdump_Command);
+            Process root_dumpingProcess = Runtime.getRuntime().exec("su");
+            DataOutputStream outputStream = new DataOutputStream(root_dumpingProcess.getOutputStream());
             //Process dumpingProcess = Runtime.getRuntime().exec(memDumpExecLoc);
             //Process dumpingProcess = Runtime.getRuntime().exec("memdump " + String.valueOf(this.getPid()) + dumpLocation);
 
-            InputStreamReader inStreamRdr = new InputStreamReader(dumpingProcess.getInputStream());
+            outputStream.writeBytes("id \n");
+            outputStream.flush();
+
+            outputStream.writeBytes(memdump_Command + "\n");
+            outputStream.flush();
+
+            InputStreamReader inStreamRdr = new InputStreamReader(root_dumpingProcess.getInputStream());
             BufferedReader buffReader = new BufferedReader(inStreamRdr);
             ////ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
@@ -154,11 +162,13 @@ public class MemDumper implements Runnable {
             }
             */
             /**/
-            char[] aCharBuff = new char[4096];
+            //char[] aCharBuff = new char[4096];
+            char[] aCharBuff = new char[65536];
             double charCounter = 0;
             int charsRead;
             while((charsRead = buffReader.read(aCharBuff, 0, aCharBuff.length)) != -1){
                 if(BuildConfig.DEBUG){
+                    Log.d(LOG_TAG, "Chars #: " + String.valueOf(charsRead));
                     Log.d(LOG_TAG, "Got Data: " + String.valueOf(aCharBuff));
                 }
                 dumpFile.write(aCharBuff);
@@ -172,7 +182,7 @@ public class MemDumper implements Runnable {
             /**/
             //buffReader.close();
             try {
-                dumpingProcess.waitFor();
+                root_dumpingProcess.waitFor();
             }catch (InterruptedException e){
                 Log.e(LOG_TAG,"Caught InterruptedException", new RuntimeException(e));
             }
