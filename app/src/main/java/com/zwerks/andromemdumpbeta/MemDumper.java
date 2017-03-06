@@ -9,9 +9,11 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -132,40 +134,37 @@ public class MemDumper implements Runnable {
             BufferedReader buffReader = new BufferedReader(inStreamRdr);
             ////ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
+            File dumpOutputFileDir = new File(dumpWriteLocPath.getPath() + "/MEMORY_DUMP");
+            boolean dirSuccess = dumpOutputFileDir.mkdir();
+            File dumpOutputFile = new File(dumpOutputFileDir + dumpFileName);
+            //dumpOutputFile.createNewFile();
+            FileWriter dumpFile =  new FileWriter(dumpOutputFile);
+
             //Reading out as lines
-            /**/
+            /*
             String singleLine;
             while((singleLine = buffReader.readLine()) != null) {
                 if(BuildConfig.DEBUG){
                     Log.d(LOG_TAG, "Dump Line: " + String.valueOf(singleLine.length()) + String.valueOf(singleLine));
                 }
+                //dumpFile.write();
             }
+            */
             /**/
-
-            /**/
-            InputStream inStr = dumpingProcess.getInputStream();
-            byte[] aByteBuff = new byte[1024];
-            File dumpOutputFileDir = new File(dumpWriteLocPath.getPath() + "/MEMORY_DUMP");
-            boolean dirSuccess = dumpOutputFileDir.mkdir();
-            File dumpOutputFile = new File(dumpOutputFileDir + dumpFileName);
-            //dumpOutputFile.createNewFile();
-            FileOutputStream dumpFile =  new FileOutputStream(dumpOutputFile);
-
-            if(BuildConfig.DEBUG){
-                Log.d(LOG_TAG, "Data Available: " + inStr.available());
-            }
-
-            double byteCounter = 0;
-            int bytesRead;
-            while((bytesRead = inStr.read(aByteBuff, 0, aByteBuff.length)) != -1){
+            char[] aCharBuff = new char[4096];
+            double charCounter = 0;
+            int charsRead;
+            while((charsRead = buffReader.read(aCharBuff, 0, aCharBuff.length)) != -1){
                 if(BuildConfig.DEBUG){
-                    Log.d(LOG_TAG, "Got Data: " + String.valueOf(aByteBuff));
+                    Log.d(LOG_TAG, "Got Data: " + String.valueOf(aCharBuff));
                 }
-                dumpFile.write(aByteBuff, 0 , bytesRead);
+                dumpFile.write(aCharBuff, 0 , charsRead);
                 //Keeping track of "Write" progress
-                byteCounter++;
+                charCounter++;
             }
-            Log.i(LOG_TAG, "File Size: " + byteCounter);
+            Log.i(LOG_TAG, "File Size: " + charCounter);
+
+
 
             /**/
             //buffReader.close();
