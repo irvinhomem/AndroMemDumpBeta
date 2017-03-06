@@ -134,11 +134,14 @@ public class MemDumper implements Runnable {
             BufferedReader buffReader = new BufferedReader(inStreamRdr);
             ////ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-            File dumpOutputFileDir = new File(dumpWriteLocPath.getPath() + "/MEMORY_DUMP");
+            /**/
+            File dumpOutputFileDir = new File(dumpWriteLocPath.getPath() + "/MEMORY_DUMPS/");
+            //Check if Dir already exists
             boolean dirSuccess = dumpOutputFileDir.mkdir();
-            File dumpOutputFile = new File(dumpOutputFileDir + dumpFileName);
+            File dumpOutputFile = new File(dumpOutputFileDir, dumpFileName);
             //dumpOutputFile.createNewFile();
             FileWriter dumpFile =  new FileWriter(dumpOutputFile);
+            /**/
 
             //Reading out as lines
             /*
@@ -147,7 +150,7 @@ public class MemDumper implements Runnable {
                 if(BuildConfig.DEBUG){
                     Log.d(LOG_TAG, "Dump Line: " + String.valueOf(singleLine.length()) + String.valueOf(singleLine));
                 }
-                //dumpFile.write();
+                dumpFile.write(singleLine);
             }
             */
             /**/
@@ -158,13 +161,13 @@ public class MemDumper implements Runnable {
                 if(BuildConfig.DEBUG){
                     Log.d(LOG_TAG, "Got Data: " + String.valueOf(aCharBuff));
                 }
-                dumpFile.write(aCharBuff, 0 , charsRead);
+                dumpFile.write(aCharBuff);
+                //dumpFile.write(aCharBuff, 0, charsRead);
                 //Keeping track of "Write" progress
                 charCounter++;
             }
             Log.i(LOG_TAG, "File Size: " + charCounter);
-
-
+            /**/
 
             /**/
             //buffReader.close();
