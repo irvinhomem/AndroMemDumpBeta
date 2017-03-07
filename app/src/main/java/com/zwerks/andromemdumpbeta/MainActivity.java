@@ -17,11 +17,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Location where the "memdump" executable should be:
+
         String memdumpInApkLoc = folder+ "/" + "memdump";
         String memdumpInPlaceLoc = this.getFilesDir() + "/"  + "memdump";
         //String memdumpLoc = this.getFilesDir().getParent() + "/" + "lib" +"/" + "memdump";
@@ -153,21 +157,22 @@ public class MainActivity extends AppCompatActivity {
             Log.i(LOG_TAG, "Memdump file already in place");
             //Check hashes of APK asset memdump file vs. File already in place
             String inPlaceFileHash = checkFileHash(memdumpFile);
-            String apkFileHash = checkFileHash(new File(memdumpInApkLoc));
+            String apkFileHash = checkFileHash(this.getAssetAsFile(memdumpInApkLoc));
 
             if (inPlaceFileHash.equals(apkFileHash)){
-                Log.d(LOG_TAG, "Memdump files are the same ... no need to copy");
+                Log.d(LOG_TAG, "Memdump files are the same ... NO NEED TO COPY");
             }
             else{
                 Log.d(LOG_TAG, "Memdump files NOT the SAME ... NEED to RE-COPY");
-                copyMemdumpIntoPlace(memdumpInPlaceLoc);
+                copyMemdumpIntoPlace(memdumpInApkLoc);
             }
 
         }else{
             //If not place it in the right location
             Log.i(LOG_TAG, "File NOT in place...");
-            copyMemdumpIntoPlace(memdumpInPlaceLoc);
+            copyMemdumpIntoPlace(memdumpInApkLoc);
         }
+        // Set the file on disk as executable
         this.setMemDumpFile_asExectuable(memdumpInPlaceLoc);
     }
 
@@ -201,6 +206,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public File getAssetAsFile(String path){
+        //String apkFileHash = "";
+        File memDumpFileInApk = null;
+        try {
+            InputStream assetInputStr = getAssets().open(path);
+            memDumpFileInApk = File.createTempFile("Test", "tmp");
+            memDumpFileInApk.deleteOnExit();
+            FileOutputStream out = new FileOutputStream(memDumpFileInApk);
+            IOUtils.copy(assetInputStr,out);
+            out.close();
+        }catch (IOException e){
+            Log.d(LOG_TAG, "IO Exception Error getting Memdump executable from APK Assets directory.");
+            e.printStackTrace();
+        }
+
+        return memDumpFileInApk;
+    }
+
     public String checkFileHash(File inputFile){
         String hash_digest_result ="";
         try {
@@ -210,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
             byte[] dataBytes = new byte[4096];
 
             int nRead = 0;
-            while ((nRead = fis.read(dataBytes)) != 1){
+            while ((nRead = fis.read(dataBytes)) != -1){
                 md.update(dataBytes, 0, nRead);
             }
 
