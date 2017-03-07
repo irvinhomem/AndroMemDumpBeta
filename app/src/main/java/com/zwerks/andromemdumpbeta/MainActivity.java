@@ -20,11 +20,15 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.CharBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -132,47 +136,111 @@ public class MainActivity extends AppCompatActivity {
         } else if (abi.contains("armeabi")) {
             folder = "armeabi";
         }
-        String memdumpLoc = this.getFilesDir() + "/"  + "memdump";
+
+        //Location where the "memdump" executable should be:
+        String memdumpInApkLoc = folder+ "/" + "memdump";
+        String memdumpInPlaceLoc = this.getFilesDir() + "/"  + "memdump";
         //String memdumpLoc = this.getFilesDir().getParent() + "/" + "lib" +"/" + "memdump";
         // Logging
         if(BuildConfig.DEBUG){
             Log.d(LOG_TAG, "Looking for Folder : " + folder);
-            Log.d(LOG_TAG, "Checking for Memdump in: " + memdumpLoc);
+            Log.d(LOG_TAG, "Checking for Memdump in: " + memdumpInPlaceLoc);
         }
 
         //Check if memdump executable is in the right location
-        File memdumpFile = new File(memdumpLoc);
+        File memdumpFile = new File(memdumpInPlaceLoc);
         if(memdumpFile.exists()){
-            Log.d(LOG_TAG, "Memdump file already in place");
+            Log.i(LOG_TAG, "Memdump file already in place");
+            //Check hashes of APK asset memdump file vs. File already in place
+            String inPlaceFileHash = checkFileHash(memdumpFile);
+            String apkFileHash = checkFileHash(new File(memdumpInApkLoc));
+
+            if (inPlaceFileHash.equals(apkFileHash)){
+                Log.d(LOG_TAG, "Memdump files are the same ... no need to copy");
+            }
+            else{
+                Log.d(LOG_TAG, "Memdump files NOT the SAME ... NEED to RE-COPY");
+                copyMemdumpIntoPlace(memdumpInPlaceLoc);
+            }
+
         }else{
             //If not place it in the right location
-            Log.i(LOG_TAG, "File NOT in place. Starting copy process ...");
-            AssetManager assetManager = getAssets();
-            try {
-                InputStream in = assetManager.open(folder + "/" + "memdump");
+            Log.i(LOG_TAG, "File NOT in place...");
+            copyMemdumpIntoPlace(memdumpInPlaceLoc);
+        }
+        this.setMemDumpFile_asExectuable(memdumpInPlaceLoc);
+    }
 
-                //Copy file to appropriate location
-                //this = context
-                //this.openFileOutput <-- Directly puts the file into the "/files" directory
-                OutputStream out = this.openFileOutput("memdump", MODE_PRIVATE);
-                long size = 0;
-                int nRead;
-                byte[] buff = new byte[50000];
+    public void copyMemdumpIntoPlace(String inApkLocation){
+        Log.i(LOG_TAG, "Starting copy process, into 'In-Place' Location ...");
+        AssetManager assetManager = getAssets();
+        try {
+            InputStream in = assetManager.open(inApkLocation);
 
-                while((nRead = in.read(buff)) != -1){
-                    out.write(buff, 0 , nRead);
-                    size += nRead;
-                }
-                out.flush();
-                Log.d(LOG_TAG, "Copy Success: " + size + " bytes");
+            //Copy file to appropriate location
+            //this = context
+            //this.openFileOutput <-- Directly puts the file into the "/files" directory
+            OutputStream out = this.openFileOutput("memdump", MODE_PRIVATE);
+            long size = 0;
+            int nRead;
+            byte[] buff = new byte[50000];
 
-            }catch(IOException e){
+            while((nRead = in.read(buff)) != -1){
+                out.write(buff, 0 , nRead);
+                size += nRead;
+            }
+            out.flush();
+            Log.d(LOG_TAG, "Copy Success: " + size + " bytes");
 
+        }catch(IOException e){
+            Log.i(LOG_TAG, "Error Copying File");
+            if(BuildConfig.DEBUG){
+                Log.e(LOG_TAG, "Error Copying Memdump File from APK assets into App Files Directory");
+                e.printStackTrace();
             }
         }
-        this.setMemDumpFile_asExectuable(memdumpLoc);
+    }
 
+    public String checkFileHash(File inputFile){
+        String hash_digest_result ="";
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            FileInputStream fis = new FileInputStream(inputFile);
 
+            byte[] dataBytes = new byte[4096];
+
+            int nRead = 0;
+            while ((nRead = fis.read(dataBytes)) != 1){
+                md.update(dataBytes, 0, nRead);
+            }
+
+            byte[] digested_bytes = md.digest();
+
+            //Convert Byte array to Hex format
+            StringBuffer hexString =  new StringBuffer();
+            for (int i = 0; i < digested_bytes.length; i++){
+                hexString.append(Integer.toHexString(0xFF & digested_bytes[i]));
+            }
+            hash_digest_result = hexString.toString();
+
+        }catch(Exception e){
+            if(BuildConfig.DEBUG){
+                Log.d(LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
+            String error_msg ="";
+            if(e instanceof NoSuchAlgorithmException ) {
+                error_msg = "Error: Issue with the Hashing Algorithm.";
+            }else if(e instanceof FileNotFoundException){
+                error_msg = "Error: File Not Found.";
+            }
+
+            Log.i(LOG_TAG, error_msg);
+            showToast(error_msg);
+            return error_msg;
+        }
+
+        return  hash_digest_result;
     }
 
     public void checkRoot(View view){
