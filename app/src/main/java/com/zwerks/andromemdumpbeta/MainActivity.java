@@ -263,6 +263,11 @@ public class MainActivity extends AppCompatActivity {
             return error_msg;
         }
 
+        if(BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "SHA-256 hash: "+  hash_digest_result + "["+ inputFile.getPath() +"]");
+            showToast("SHA-256 hash: \n" + hash_digest_result+ "["+ inputFile.getPath() +"]");
+        }
+
         return  hash_digest_result;
     }
 
