@@ -8,10 +8,16 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class ListProcessesActivity extends AppCompatActivity {
+    private final String LOG_TAG = getClass().getSimpleName();
 
     // RecyclerView variables
     private RecyclerView mRecyclerView;
@@ -45,6 +51,21 @@ public class ListProcessesActivity extends AppCompatActivity {
         ProcListItem headersLineItem = (ProcListItem)psLister.getHeadersArrayList().get(0);
         String headersAsString = headersLineItem.getAllItems();
         mHeaderLineText.setText(headersAsString);
+
+        //Populate Spinner
+        if(psLister.getHeadersArrayList().size() > 0) {
+            ArrayList<String> headers = psLister.getHeadersArrayList().get(0).getProcInfoItems();
+            String[] headersArray = headers.toArray(new String[0]);
+
+            ArrayAdapter<String> spinnerAdapter =  new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, headersArray);
+
+            spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            Spinner filterOptions = (Spinner) findViewById(R.id.spnFilterOptions);
+            filterOptions.setAdapter(spinnerAdapter);
+
+        }else{
+            Log.d(LOG_TAG, "Header Strings missing in ProcItems ArrayList");
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

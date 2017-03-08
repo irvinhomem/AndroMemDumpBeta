@@ -23,6 +23,8 @@ public class ProcListItem {
     private final String LOG_TAG = getClass().getSimpleName();
     private Context mContext;
 
+
+
     private ArrayList<String> procInfoItems = new ArrayList<String>();
     private boolean isHeaderLine = false;
     private int pid = 0;
@@ -38,6 +40,10 @@ public class ProcListItem {
 
     public void append(String procInfoItem){
         this.procInfoItems.add(procInfoItem);
+    }
+
+    public ArrayList<String> getProcInfoItems() {
+        return procInfoItems;
     }
 
     public String getAllItems(){

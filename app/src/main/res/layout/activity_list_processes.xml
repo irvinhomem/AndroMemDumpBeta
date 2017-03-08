@@ -33,26 +33,27 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <TextView
-                android:id="@+id/txt_HeaderTextLine"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorMyBabyBlue"
-                android:textColor="@color/colorPrimaryDark"
-                android:paddingTop="2dp"
-                android:paddingLeft="20dp"
-                android:paddingBottom="2dp"
-                android:text="@string/short_text"
-                android:textSize="10sp"
-                app:layout_anchor="@id/app_bar"
-                app:layout_anchorGravity="bottom|end"
-                android:layout_gravity="bottom"/>
-
-
+            <include layout="@layout/processes_header_line" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+    <!--
+    <RelativeLayout
+        android:id="@+id/FilterBox_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end">
+        <TextView
+            android:id="@+id/txtFilterBox"
+            android:text="TESTING"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"/>
+    </RelativeLayout>
+    -->
 
     <!--
     android:paddingTop="12dp"
