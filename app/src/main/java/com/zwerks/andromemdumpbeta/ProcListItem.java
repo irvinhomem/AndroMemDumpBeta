@@ -22,9 +22,6 @@ import java.util.StringTokenizer;
 public class ProcListItem {
     private final String LOG_TAG = getClass().getSimpleName();
     private Context mContext;
-
-
-
     private ArrayList<String> procInfoItems = new ArrayList<String>();
     private boolean isHeaderLine = false;
     private int pid = 0;
@@ -89,6 +86,10 @@ public class ProcListItem {
         myDumpThread.start();
 
         //mem_dumper.run();
+    }
+
+    public String getProcInfoItems(int index){
+        return this.procInfoItems.get(index);
     }
 
 

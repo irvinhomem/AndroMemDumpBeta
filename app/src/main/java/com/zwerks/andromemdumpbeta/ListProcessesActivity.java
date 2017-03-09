@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +22,11 @@ public class ListProcessesActivity extends AppCompatActivity {
 
     // RecyclerView variables
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    //private RecyclerView.Adapter mAdapter;
+    private ProcessRecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView mHeaderLineText;
+    private AppCompatEditText mTxtFilterCriteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class ListProcessesActivity extends AppCompatActivity {
             spinnerAdapter.setDropDownViewResource(R.layout.process_filter_spinner_dropdown_item);
             Spinner filterOptions = (Spinner) findViewById(R.id.spnFilterOptions);
             filterOptions.setAdapter(spinnerAdapter);
+            filterOptions.setSelection(spinnerAdapter.getPosition("NAME"));
 
         }else{
             Log.d(LOG_TAG, "Header Strings missing in ProcItems ArrayList");
@@ -89,5 +93,16 @@ public class ListProcessesActivity extends AppCompatActivity {
         RecyclerView.ItemDecoration itemDecoration =
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(itemDecoration);
+    }
+
+    public void doBroadFilter(View view){
+
+        mTxtFilterCriteria = (AppCompatEditText)findViewById(R.id.txtFilterCriteria);
+        String filterCriteria = mTxtFilterCriteria.getText().toString();
+        this.mAdapter.filter("nothing yet", filterCriteria);
+
+        if(BuildConfig.DEBUG){
+            Log.d(LOG_TAG, "Current Text: " + filterCriteria);
+        }
     }
 }

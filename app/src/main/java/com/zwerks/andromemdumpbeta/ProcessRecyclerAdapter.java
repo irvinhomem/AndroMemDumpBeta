@@ -20,6 +20,7 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     private final String LOG_TAG = getClass().getSimpleName();
     //private ArrayList<String> mDataset;     // Variable with all the processes
     private ArrayList<ProcListItem> mDataset;     // Variable with all the processes
+    private ArrayList<ProcListItem> itemsCopy;
     //private ArrayList<ProcListItem> mHeadersLine;
     //private Context mContext;               // Store the context for easy access
     private ViewGroup mLastClickedRow_rb_btn = null;
@@ -60,6 +61,9 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
         //Assign the received dataset (arraylist) to the adapter's dataset property
         mDataset = myDataset;
         mContext = context;
+
+        itemsCopy = new ArrayList<ProcListItem>();
+        itemsCopy.addAll(mDataset);
         //this.mHeadersLine = headers;
     }
 
@@ -159,6 +163,25 @@ public class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecycler
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public void filter(String option, String filterCriteria){
+        mDataset.clear();
+        if(filterCriteria.isEmpty()){
+            mDataset.addAll(itemsCopy);
+        }else{
+            String filterCriterion = filterCriteria.toLowerCase();
+            for (ProcListItem procItem: itemsCopy){
+                for (int i =0; i < procItem.getProcInfoItems().size(); i++){
+                    if(procItem.getProcInfoItems(i).toLowerCase().contains(filterCriterion)){
+                        mDataset.add(procItem);
+                    }
+                }
+
+            }
+        }
+        notifyDataSetChanged();
+
     }
 /*
     public dumpProcessMemory(ProcListItem processItem){

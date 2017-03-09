@@ -10,7 +10,7 @@
     android:nestedScrollingEnabled="false">
     <TextView
         android:id="@+id/lblFilter"
-        android:text="Filter:"
+        android:text="Process Filter:"
         android:textSize="10sp"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:id="@+id/txtFilterCriteria"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:hint="Criteria"
+            android:hint=" Criteria"
             android:textSize="11sp"
             android:layout_width="0dp"
             android:layout_weight="4"/>
@@ -49,14 +49,15 @@
          android:layout_alignParentTop="true"-->
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnFilterProcesses"
             android:layout_width="10dp"
             android:layout_height="35dp"
             android:text="Filter"
             android:textSize="11sp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:onClick="doBroadFilter"/>
 
     </LinearLayout>
 
