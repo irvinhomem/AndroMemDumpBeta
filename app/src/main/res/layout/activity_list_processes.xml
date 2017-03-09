@@ -33,8 +33,8 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <include layout="@layout/processes_header_line" />
-
+            <!-- Previous HeaderLine position -->
+            <!-- <include layout="@layout/processes_header_line" /> -->
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -81,5 +81,7 @@
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_file_download_white_48dp" />
     <!-- app:srcCompat="@android:drawable/ic_dialog_email" -->
+
+    <include layout="@layout/processes_header_line"/>
 
 </android.support.design.widget.CoordinatorLayout>
