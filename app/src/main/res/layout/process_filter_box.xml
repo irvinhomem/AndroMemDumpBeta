@@ -1,46 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/FilterBox_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
-    android:orientation="horizontal"
-    android:background="@color/colorMyBabyBlue"
+    android:background="@color/colorMyFadedPink"
     android:focusableInTouchMode="true"
     android:nestedScrollingEnabled="false">
     <TextView
         android:id="@+id/lblFilter"
         android:text="Filter:"
-        android:textSize="11sp"
+        android:textSize="10sp"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"/>
-
-    <Spinner
-        android:id="@+id/spnFilterOptions"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/txtFilterCriteria"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center_vertical"
-        android:paddingLeft="5dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:hint="Criteria"
-        android:textSize="11sp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"/>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:text="Filter"
-        android:textSize="11sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_below="@+id/lblFilter"
+        android:layout_alignLeft="@id/lblFilter"
+        android:layout_alignStart="@id/lblFilter">
 
-</LinearLayout>
+        <Spinner
+            android:id="@+id/spnFilterOptions"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/txtFilterCriteria"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="Criteria"
+            android:textSize="11sp"
+            android:layout_width="0dp"
+            android:layout_weight="4"/>
+        <!--
+         android:layout_alignParentTop="true"-->
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="10dp"
+            android:layout_height="35dp"
+            android:text="Filter"
+            android:textSize="11sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
 

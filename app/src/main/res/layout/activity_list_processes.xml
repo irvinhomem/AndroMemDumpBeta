@@ -35,9 +35,11 @@
 
             <include layout="@layout/processes_header_line" />
 
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
     <!--
     <RelativeLayout
         android:id="@+id/FilterBox_holder"
@@ -67,6 +69,8 @@
     -->
 
     <include layout="@layout/content_list_processes" />
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

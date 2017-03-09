@@ -26,7 +26,8 @@
             android:layout_alignParentLeft="true"
             android:text="@string/large_text" -->
         <!---->
-        <include layout="@layout/process_filter_box" />
+
+    <!-- <include layout="@layout/process_filter_box" /> -->
         <!---->
 
         <android.support.v7.widget.RecyclerView
@@ -46,6 +47,8 @@
          android:scrollbarTrackVertical="@color/colorPrimaryDark"
          android:scrollbarThumbVertical="@android:color/darker_gray"
          android:scrollbarSize="20dp"-->
+
+        <include layout="@layout/process_filter_box" />
 
         <TextView
             android:id="@+id/txt_process_list_output"

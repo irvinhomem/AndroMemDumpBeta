@@ -57,9 +57,9 @@ public class ListProcessesActivity extends AppCompatActivity {
             ArrayList<String> headers = psLister.getHeadersArrayList().get(0).getProcInfoItems();
             String[] headersArray = headers.toArray(new String[0]);
 
-            ArrayAdapter<String> spinnerAdapter =  new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, headersArray);
+            ArrayAdapter<String> spinnerAdapter =  new ArrayAdapter<String>(this, R.layout.process_filter_spinner_item, headersArray);
 
-            spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            spinnerAdapter.setDropDownViewResource(R.layout.process_filter_spinner_dropdown_item);
             Spinner filterOptions = (Spinner) findViewById(R.id.spnFilterOptions);
             filterOptions.setAdapter(spinnerAdapter);
 

@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="colorMyBabyBlue">#a9edf1</color>
+    <color name="colorMyLightGrey">#e5e7e7</color>
+    <color name="colorMyMateriaRed100">#ffcdd2</color>
+    <color name="colorMyFadedPink">#f5c8cc</color>
 </resources>
