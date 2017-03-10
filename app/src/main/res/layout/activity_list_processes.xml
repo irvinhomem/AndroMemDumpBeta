@@ -22,7 +22,8 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-            <!-- app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title" -->
+            <!-- app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+             app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
 
             <include layout="@layout/process_list_stats"/>
 

@@ -7,7 +7,7 @@
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.zwerks.andromemdumpbeta.ListProcessesActivity"
-    tools:showIn="@layout/activity_list_processes" >
+    tools:showIn="@layout/activity_list_processes">
     <!-- android:layout_below="@id/txt_HeaderTextLine"
     android:scrollbarTrackVertical=""
     android:fadeScrollbars="true"
@@ -35,7 +35,8 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/FilterBox_holder"/>
+            android:layout_below="@+id/FilterBox_holder"
+            />
         <!-- android:paddingTop="7dp"
          android:layout_below="@id/txt_HeaderTextLine"
          android:scrollbarStyle="insideOverlay"
