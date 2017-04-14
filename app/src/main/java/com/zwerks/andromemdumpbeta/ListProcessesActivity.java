@@ -1,14 +1,18 @@
 package com.zwerks.andromemdumpbeta;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -43,12 +47,36 @@ public class ListProcessesActivity extends AppCompatActivity {
 
         // Use a Linear Layout Manager for the RecyclerView
         mLayoutManager =  new LinearLayoutManager(this);
+        /*{
+            @Override
+            public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+                LinearSmoothScroller smoothScroller = new LinearSmoothScroller(getBaseContext()) {
+
+                    private static final float SPEED = 300f;// Change this value (default=25f)
+
+                    @Override
+                    protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                        return SPEED / displayMetrics.densityDpi;
+                    }
+
+                };
+                smoothScroller.setTargetPosition(position);
+                startSmoothScroll(smoothScroller);
+            }
+        };
+        /*/
+        //mLayoutManager = layoutManager;
+        //mLayoutManager.setAutoMeasureEnabled(true);
+        if(BuildConfig.DEBUG) {
+            Log.d(LOG_TAG, "Can Scroll Vertically: " + mLayoutManager.canScrollVertically());
+        }
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Specify an adapter
         psProcessLister psLister = new psProcessLister(this);
         this.mAdapter = new ProcessRecyclerAdapter(this, psLister.getProcessesAsList());
         this.mRecyclerView.setAdapter(mAdapter);
+        //this.mRecyclerView.setOnFlingListener();
 
         // Get the Headers from the Headers ArrayList
         ProcListItem headersLineItem = (ProcListItem)psLister.getHeadersArrayList().get(0);

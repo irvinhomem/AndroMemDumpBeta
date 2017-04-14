@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
     tools:context="com.zwerks.andromemdumpbeta.ListProcessesActivity"
     tools:showIn="@layout/activity_list_processes">
     <!-- android:layout_below="@id/txt_HeaderTextLine"
     android:scrollbarTrackVertical=""
     android:fadeScrollbars="true"
-    android:scrollbarFadeDuration="3"-->
+    android:scrollbarFadeDuration="3"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
 
     <RelativeLayout
         android:layout_width="match_parent"
