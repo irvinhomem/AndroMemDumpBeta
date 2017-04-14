@@ -177,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void copyMemdumpIntoPlace(String inApkLocation){
+        // Copying the Memdump executable from the Assets resource location (within APK Archive)
+        // out into the /files directory
         Log.i(LOG_TAG, "Starting copy process, into 'In-Place' Location ...");
         AssetManager assetManager = getAssets();
         try {
